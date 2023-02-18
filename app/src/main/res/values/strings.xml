@@ -5,4 +5,16 @@
     <string name="app_about_type">・групп\n・преподавателей\n・аудиторий</string>
     <string name="authorize">Авторизоваться</string>
     <string name="enter_how_guest">Войти как гость</string>
+    <string name="choosing_role">Выберите чьё расписание хотите видеть?</string>
+    <string name="student">Студент</string>
+    <string name="teacher">Преподаватель</string>
+    <string name="return_back">Вернуться назад</string>
+    <string name="choosing_group">Выберите группу</string>
+    <string name="what_your_name">Как Вас зовут?</string>
+    <string name="choosing_teacher">Выберите преподавателя</string>
+    <string name="group_number">Номер группы</string>
+    <string name="full_name">ФИО</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="wait_confirmation_group">Ожидайте подтверждения смены группы на почту %1$s</string>
+    <string name="ok">Ок</string>
 </resources>
