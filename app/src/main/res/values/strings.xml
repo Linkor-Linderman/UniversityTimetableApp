@@ -17,4 +17,15 @@
     <string name="confirm">Подтвердить</string>
     <string name="wait_confirmation_group">Ожидайте подтверждения смены группы на почту %1$s</string>
     <string name="ok">Ок</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="enter">Войти</string>
+    <string name="have_not_account">У меня ещё нет аккаунта</string>
+    <string name="surname">Фамилия</string>
+    <string name="name">Имя</string>
+    <string name="patronymic">Отчество</string>
+    <string name="email">E-mail</string>
+    <string name="confirm_password">Подтвердите пароль</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="have_account">У меня уже есть аккаунт</string>
 </resources>
