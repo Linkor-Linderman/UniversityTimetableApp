@@ -28,4 +28,18 @@
     <string name="confirm_password">Подтвердите пароль</string>
     <string name="register">Зарегистрироваться</string>
     <string name="have_account">У меня уже есть аккаунт</string>
+    <string name="group">Группа</string>
+    <string name="profile">Профиль</string>
+    <string name="exit">Выйти</string>
+    <string name="change_group">Изменить группу</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="watch_another_schedule">Посмотреть расписание\nгруппы / преподавателя</string>
+    <string name="not_enter_in_account">Вы ещё не вошли в аккаунт</string>
+    <string name="entrance">Вход</string>
+    <string name="registration">Pегистрация</string>
+    <string name="change_initial_choice">Изменить первоначальный выбор</string>
+    <string name="changing_password">Смена пароля</string>
+    <string name="old_password">Старый пароль</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="changing">Сменить</string>
 </resources>
