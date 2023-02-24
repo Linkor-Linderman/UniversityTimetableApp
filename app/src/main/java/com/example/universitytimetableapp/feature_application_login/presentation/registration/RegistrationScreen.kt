@@ -61,7 +61,7 @@ fun RegistrationScreen() {
             modifier = Modifier
                 .padding(15.dp)
                 .fillMaxWidth()
-                .fillMaxHeight(0.75f)
+                .fillMaxHeight(0.68f)
                 .verticalScroll(rememberScrollState())
         ) {
             InputField(state = surname, valChange = {s -> surname.value = s }, name = stringResource(R.string.surname))

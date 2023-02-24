@@ -33,7 +33,7 @@ fun FirstScreen() {
     ) {
         Box(modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.9f)) {
+            .fillMaxHeight(0.89f)) {
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.white_background_form),
                 contentDescription = null,
@@ -117,7 +117,6 @@ fun FirstScreen() {
                         color = Color.White
                     )
                 }
-
             }
         }
     }

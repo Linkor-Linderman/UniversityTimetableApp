@@ -26,26 +26,31 @@ import com.example.universitytimetableapp.ui.theme.*
 
 @Composable
 fun ChoosingScreen() {
-    Image(
-        imageVector = ImageVector.vectorResource(R.drawable.brown_background_form),
-        contentDescription = null,
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(top = 20.dp),
-        contentScale = ContentScale.FillWidth
-    )
-    ChoosingRole()
+            .fillMaxSize()
+            .padding(bottom = 50.dp)
+    ) {
+        Image(
+            imageVector = ImageVector.vectorResource(R.drawable.brown_background_form),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.95f)
+                .padding(top = 35.dp),
+            contentScale = ContentScale.FillBounds
+        )
+    }
+    ChoosingGroupOrTeacher()
 }
 
 @Composable
 fun ChoosingRole() {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Center
+            .fillMaxSize()
     ) {
+        Spacer(modifier = Modifier.fillMaxHeight(0.15f))
         Text(
             text = stringResource(R.string.choosing_role),
             modifier = Modifier.padding(start = 25.dp, end = 25.dp),
@@ -89,7 +94,7 @@ fun ChoosingRole() {
                 fontSize = 15.sp
             )
         }
-        Spacer(modifier = Modifier.padding(55.dp))
+        Spacer(modifier = Modifier.fillMaxHeight(0.4f))
         TextButton(
             onClick = { },
             modifier = Modifier
@@ -97,7 +102,7 @@ fun ChoosingRole() {
                 .padding(start = 20.dp)
         ) {
             Text(
-                text =  stringResource(R.string.return_back),
+                text = stringResource(R.string.return_back),
                 fontFamily = Zekton,
                 fontWeight = FontWeight.Normal,
                 fontSize = 15.sp,
@@ -118,7 +123,7 @@ fun ChoosingGroupOrTeacher() {
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
-        Spacer(modifier = Modifier.fillMaxHeight(0.22f))
+        Spacer(modifier = Modifier.fillMaxHeight(0.15f))
         Text(
             text =  stringResource(R.string.choosing_group),   //stringResource(R.string.what_your_name)  stringResource(R.string.choosing_teacher)
             modifier = Modifier.padding(start = 25.dp, end = 25.dp),
@@ -184,7 +189,7 @@ fun ChoosingGroupOrTeacher() {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 15.dp, top = 10.dp, end = 15.dp)
+                .padding(start = 15.dp, top = 20.dp, end = 15.dp)
         ) {
             TextButton(
                 onClick = { },
@@ -237,7 +242,10 @@ fun ChoosingGroupOrTeacher() {
                     },
                     modifier = Modifier
                         .size(180.dp, 40.dp),
-                    shape = RoundedCornerShape(15.dp)
+                    shape = RoundedCornerShape(15.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = brown
+                    )
                 ) {
                     Text(
                         text = stringResource(R.string.ok),
