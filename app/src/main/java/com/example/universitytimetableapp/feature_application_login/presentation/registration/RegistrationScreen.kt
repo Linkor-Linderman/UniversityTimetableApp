@@ -15,6 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.feature_application_login.presentation.FirstButton
 import com.example.universitytimetableapp.feature_application_login.presentation.InputField
@@ -22,7 +23,9 @@ import com.example.universitytimetableapp.feature_application_login.presentation
 import com.example.universitytimetableapp.ui.theme.greyTint
 
 @Composable
-fun RegistrationScreen() {
+fun RegistrationScreen(
+    navController: NavController
+) {
     val surname = remember { mutableStateOf("") }
     val name = remember { mutableStateOf("") }
     val patronymic = remember { mutableStateOf("") }

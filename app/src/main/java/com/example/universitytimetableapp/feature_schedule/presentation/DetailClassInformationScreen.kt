@@ -5,18 +5,19 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.feature_schedule.presentation.composable.RowWithTextAndIcon
 import com.example.universitytimetableapp.feature_schedule.presentation.composable.TopBarForDetailClassInformationScreen
 import com.example.universitytimetableapp.ui.theme.brown
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-@Preview
 @Composable
-fun DetailClassInformationScreen() {
+fun DetailClassInformationScreen(
+    navController: NavController
+) {
     val systemUiController = rememberSystemUiController()
 
     systemUiController.setSystemBarsColor(

@@ -13,6 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.feature_application_login.presentation.FirstButton
 import com.example.universitytimetableapp.feature_application_login.presentation.InputField
@@ -20,7 +21,9 @@ import com.example.universitytimetableapp.feature_application_login.presentation
 import com.example.universitytimetableapp.ui.theme.greyTint
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    navController: NavController
+) {
     val login = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val inputNotEmpty = remember { mutableStateOf(false) }

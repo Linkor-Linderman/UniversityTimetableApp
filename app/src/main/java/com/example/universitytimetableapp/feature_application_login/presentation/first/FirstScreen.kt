@@ -19,13 +19,16 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.ui.theme.Jura
 import com.example.universitytimetableapp.ui.theme.Zekton
 import com.example.universitytimetableapp.ui.theme.brown
 
 @Composable
-fun FirstScreen() {
+fun FirstScreen(
+    navController: NavController
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
