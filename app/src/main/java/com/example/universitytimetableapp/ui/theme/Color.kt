@@ -9,6 +9,7 @@ val Teal200 = Color(0xFF03DAC5)
 
 val brown = Color(0xFF371B1B)
 val greyLight = Color(0xFFB7B7B7)
-val greyDark = Color(0x4D371B1B)
+val greyDark = Color(0xFF371B1B)
 val greyMedium = Color(0x33371B1B)
 val greyTint = Color(0xFFD1D1D1)
+val greyForSelectedDay = Color(0x66FFFFFF)
