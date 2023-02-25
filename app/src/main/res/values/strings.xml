@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">UniversityTimetableApp</string>
+    <string name="monday">пн</string>
+    <string name="tuesday">вт</string>
+    <string name="wednesday">ср</string>
+    <string name="thursday">чт</string>
+    <string name="friday">пт</string>
+    <string name="saturday">сб</string>
+    <string name="sunday">вс</string>
     <string name="welcome">Добро пожаловать в \nAxoSchedule</string>
     <string name="app_about">Приложение для просмотра расписания студенческих: </string>
     <string name="app_about_type">・групп\n・преподавателей\n・аудиторий</string>
