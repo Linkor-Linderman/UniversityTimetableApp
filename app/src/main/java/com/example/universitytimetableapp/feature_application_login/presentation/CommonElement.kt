@@ -102,10 +102,11 @@ fun FirstButton(
 
 @Composable
 fun SecondButton(
-    name: String
+    name: String,
+    click: () -> Unit
 ) {
     TextButton(
-        onClick = {  },
+        onClick =  click ,
         modifier = Modifier
     ) {
         Text(

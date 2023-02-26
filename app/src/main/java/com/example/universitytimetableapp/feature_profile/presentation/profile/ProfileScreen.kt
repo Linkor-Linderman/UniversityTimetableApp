@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
+import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.ui.theme.Jura
 import com.example.universitytimetableapp.ui.theme.Zekton
 import com.example.universitytimetableapp.ui.theme.brown
@@ -43,7 +44,7 @@ fun ProfileScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.back_arrow),
                             contentDescription = null,
@@ -59,7 +60,7 @@ fun ProfileScreen(
                         color = Color.White
                     )
                     TextButton(
-                        onClick = { },
+                        onClick = { navController.navigate(Screen.FirstScreen.route) },
                         modifier = Modifier.alpha(if (isGuest) 0f else 1f),
                         enabled = !isGuest
                     ) {
@@ -93,7 +94,7 @@ fun ProfileScreen(
                         color = Color.White
                     )
                     Spacer(modifier = Modifier.fillMaxWidth(0.25f))
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = { navController.navigate(Screen.ChoosingScreen.route) }) {
                         Icon(imageVector = ImageVector.vectorResource(R.drawable.choice_arrow),
                             contentDescription = null,
                             tint = Color.White
@@ -104,10 +105,10 @@ fun ProfileScreen(
         }
     ) { padding ->
         if (isGuest) {
-            GuestProfile(padding = padding)
+            GuestProfile(padding = padding, navController)
         }
         else {
-            MainProfile(padding = padding)
+            MainProfile(padding = padding, navController)
         }
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_schedule.presentation.composable.FloatingActionButtonForScheduleScreen
 import com.example.universitytimetableapp.feature_schedule.presentation.composable.TimeTableForWeek
 import com.example.universitytimetableapp.feature_schedule.presentation.composable.TopBarForScheduleScreen
@@ -28,7 +29,7 @@ fun ScheduleScreen(
     Scaffold(
         topBar = { TopBarForScheduleScreen(text = "972101") },
         floatingActionButtonPosition = FabPosition.End,
-        floatingActionButton = { FloatingActionButtonForScheduleScreen {} }
+        floatingActionButton = { FloatingActionButtonForScheduleScreen { navController.navigate(Screen.ProfileScreen.route) } }
     ) { padding ->
         TimeTableForWeek(
             modifier = Modifier.padding(padding)

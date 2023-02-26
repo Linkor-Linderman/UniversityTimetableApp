@@ -17,6 +17,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
+import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_application_login.presentation.FirstButton
 import com.example.universitytimetableapp.feature_application_login.presentation.InputField
 import com.example.universitytimetableapp.feature_application_login.presentation.SecondButton
@@ -87,9 +88,9 @@ fun RegistrationScreen(
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            FirstButton(name = stringResource(R.string.register), state = inputNotEmpty, click = {})
+            FirstButton(name = stringResource(R.string.register), state = inputNotEmpty, click = { navController.navigate(Screen.ScheduleScreen.route) } )
             Spacer(modifier = Modifier.padding(5.dp))
-            SecondButton(name = stringResource(R.string.have_account))
+            SecondButton(name = stringResource(R.string.have_account), click = { navController.navigate(Screen.LoginScreen.route) })
         }
     }
 }

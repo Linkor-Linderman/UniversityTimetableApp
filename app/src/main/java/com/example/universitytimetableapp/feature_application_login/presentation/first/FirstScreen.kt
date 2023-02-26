@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
+import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.ui.theme.Jura
 import com.example.universitytimetableapp.ui.theme.Zekton
 import com.example.universitytimetableapp.ui.theme.brown
@@ -91,7 +92,7 @@ fun FirstScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = { },
+                    onClick = { navController.navigate(Screen.LoginScreen.route) },
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .height(40.dp),
@@ -109,7 +110,7 @@ fun FirstScreen(
                 Spacer(modifier = Modifier.padding(8.dp))
 
                 TextButton(
-                    onClick = { },
+                    onClick = { navController.navigate(Screen.ChoosingScreen.route) },
                     modifier = Modifier.size(180.dp, 40.dp)
                 ) {
                     Text(

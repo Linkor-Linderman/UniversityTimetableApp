@@ -9,13 +9,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
+import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_profile.presentation.FillProfileButton
 import com.example.universitytimetableapp.feature_profile.presentation.ProfileButton
 import com.example.universitytimetableapp.ui.theme.Jura
 
 @Composable
-fun GuestProfile(padding: PaddingValues) {
+fun GuestProfile(padding: PaddingValues, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -32,9 +34,9 @@ fun GuestProfile(padding: PaddingValues) {
         )
 
         Spacer(modifier = Modifier.fillMaxHeight(0.2f))
-        FillProfileButton(name = stringResource(R.string.entrance), click = {})
+        FillProfileButton(name = stringResource(R.string.entrance), click = {navController.navigate(Screen.LoginScreen.route)})
         Spacer(modifier = Modifier.padding(10.dp))
-        FillProfileButton(name = stringResource(R.string.registration), click = {})
+        FillProfileButton(name = stringResource(R.string.registration), click = {navController.navigate(Screen.ChoosingScreen.route)})
 
         Box(
             modifier = Modifier
@@ -43,7 +45,7 @@ fun GuestProfile(padding: PaddingValues) {
                 .padding(start = 40.dp, bottom = 15.dp, end = 40.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
-            ProfileButton(name = stringResource(R.string.change_initial_choice), click = {})
+            ProfileButton(name = stringResource(R.string.change_initial_choice), click = {navController.navigate(Screen.ChoosingScreen.route)})
         }
     }
 }

@@ -21,13 +21,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
+import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.ui.theme.*
 
 @Composable
 fun ChoosingScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: ChoosingViewModel = viewModel()
 ) {
     Box(
         modifier = Modifier
@@ -44,11 +47,16 @@ fun ChoosingScreen(
             contentScale = ContentScale.FillBounds
         )
     }
-    ChoosingGroupOrTeacher()
+    if (viewModel.isRoleChosen.value) {
+        ChoosingGroupOrTeacher(navController, viewModel)
+    }
+    else {
+        ChoosingRole(navController, viewModel)
+    }
 }
 
 @Composable
-fun ChoosingRole() {
+fun ChoosingRole(navController: NavController, viewModel: ChoosingViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -65,7 +73,7 @@ fun ChoosingRole() {
         )
         Spacer(modifier = Modifier.padding(25.dp))
         Button(
-            onClick = { },
+            onClick = { viewModel.isRoleChosen.value = true },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 25.dp, end = 25.dp)
@@ -82,7 +90,7 @@ fun ChoosingRole() {
         }
         Spacer(modifier = Modifier.padding(15.dp))
         Button(
-            onClick = { },
+            onClick = { viewModel.isRoleChosen.value = true },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 25.dp, end = 25.dp)
@@ -99,7 +107,7 @@ fun ChoosingRole() {
         }
         Spacer(modifier = Modifier.fillMaxHeight(0.4f))
         TextButton(
-            onClick = { },
+            onClick = { navController.navigateUp() },
             modifier = Modifier
                 .size(200.dp, 40.dp)
                 .padding(start = 20.dp)
@@ -116,7 +124,7 @@ fun ChoosingRole() {
 }
 
 @Composable
-fun ChoosingGroupOrTeacher() {
+fun ChoosingGroupOrTeacher(navController: NavController, viewModel: ChoosingViewModel) {
     var text by remember { mutableStateOf("") }
     val groupList = listOf("972101", "972102", "972103", "972105", "972110", "972201", "972202", "972203", "972205", "972210")
     var showDialog by remember { mutableStateOf(false) }
@@ -195,7 +203,7 @@ fun ChoosingGroupOrTeacher() {
                 .padding(start = 15.dp, top = 20.dp, end = 15.dp)
         ) {
             TextButton(
-                onClick = { },
+                onClick = { viewModel.isRoleChosen.value = false },
                 modifier = Modifier.size(180.dp, 40.dp)
             ) {
                 Text(
@@ -242,6 +250,7 @@ fun ChoosingGroupOrTeacher() {
                 Button(
                     onClick = {
                         showDialog = false
+                        navController.navigate(Screen.RegistrationScreen.route)
                     },
                     modifier = Modifier
                         .size(180.dp, 40.dp),
