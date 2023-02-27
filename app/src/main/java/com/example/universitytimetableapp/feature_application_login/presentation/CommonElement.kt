@@ -16,24 +16,23 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.universitytimetableapp.ui.theme.Jura
-import com.example.universitytimetableapp.ui.theme.brown
-import com.example.universitytimetableapp.ui.theme.greyLight
-import com.example.universitytimetableapp.ui.theme.greyTint
+import com.example.universitytimetableapp.ui.theme.*
 
 @Composable
 fun InputField(
-    state: State<String>,
+    state: State<String?>,
     valChange: (String) -> Unit,
     name: String,
-    isPassword: Boolean = false
+    isPassword: Boolean = false,
+    isEnable: Boolean = true
 ) {
     OutlinedTextField(
-        value = state.value,
+        value = state.value ?: "",
         onValueChange = { valChange(it) },
         modifier = Modifier
             .fillMaxWidth()
             .height(52.dp),
+        enabled = isEnable,
         placeholder = {
             Text(
                 text = name,
@@ -51,8 +50,10 @@ fun InputField(
             letterSpacing = if (isPassword) 5.sp else 0.sp
         ),
         colors = TextFieldDefaults.outlinedTextFieldColors(
+            backgroundColor = if (isEnable) brown else white10,
             focusedBorderColor = greyLight,
             unfocusedBorderColor = greyLight,
+            disabledBorderColor = white10
         ),
         shape = RoundedCornerShape(8.dp),
         visualTransformation = if (isPassword)

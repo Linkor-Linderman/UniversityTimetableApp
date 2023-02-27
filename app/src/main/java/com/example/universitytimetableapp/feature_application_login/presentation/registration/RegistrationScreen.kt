@@ -1,12 +1,12 @@
 package com.example.universitytimetableapp.feature_application_login.presentation.registration
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.ColorPainter
@@ -15,8 +15,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
+import com.example.universitytimetableapp.common.Constants
 import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_application_login.presentation.FirstButton
 import com.example.universitytimetableapp.feature_application_login.presentation.InputField
@@ -25,18 +27,9 @@ import com.example.universitytimetableapp.ui.theme.greyTint
 
 @Composable
 fun RegistrationScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: RegistrationViewModel = hiltViewModel()
 ) {
-    val surname = remember { mutableStateOf("") }
-    val name = remember { mutableStateOf("") }
-    val patronymic = remember { mutableStateOf("") }
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
-    val confirmPassword = remember { mutableStateOf("") }
-    val inputNotEmpty = remember { mutableStateOf(false) }
-
-    inputNotEmpty.value = email.value.isNotEmpty() && password.value.isNotEmpty()
-
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -68,18 +61,41 @@ fun RegistrationScreen(
                 .fillMaxHeight(0.68f)
                 .verticalScroll(rememberScrollState())
         ) {
-            InputField(state = surname, valChange = {s -> surname.value = s }, name = stringResource(R.string.surname))
+            InputField(
+                state = viewModel.surname.observeAsState(),
+                valChange = { viewModel.setSurname(it) }, name = stringResource(R.string.surname),
+                isEnable = viewModel.role != Constants.TEACHER
+            )
             Spacer(modifier = Modifier.padding(8.dp))
-            InputField(state = name, valChange = {s -> name.value = s }, name = stringResource(R.string.name))
+            InputField(
+                state = viewModel.name.observeAsState(),
+                valChange = { viewModel.setName(it) }, name = stringResource(R.string.name),
+                isEnable = viewModel.role != Constants.TEACHER
+            )
             Spacer(modifier = Modifier.padding(8.dp))
-            InputField(state = patronymic, valChange = {s -> patronymic.value = s }, name = stringResource(R.string.patronymic))
+            InputField(
+                state = viewModel.patronymic.observeAsState(),
+                valChange = { viewModel.setPatronymic(it) }, name = stringResource(R.string.patronymic),
+                isEnable = viewModel.role != Constants.TEACHER
+            )
             Spacer(modifier = Modifier.padding(8.dp))
-            InputField(state = email, valChange = {s -> email.value = s }, name = stringResource(R.string.email))
+            InputField(
+                state = viewModel.email.observeAsState(),
+                valChange = { viewModel.setEmail(it) }, name = stringResource(R.string.email)
+            )
             Spacer(modifier = Modifier.padding(8.dp))
-            InputField(state = password, valChange = {s -> password.value = s }, name = stringResource(R.string.password), isPassword = true)
+            InputField(
+                state = viewModel.password.observeAsState(),
+                valChange = { viewModel.setPassword(it) }, name = stringResource(R.string.password), isPassword = true
+            )
             Spacer(modifier = Modifier.padding(8.dp))
-            InputField(state = confirmPassword, valChange = {s -> confirmPassword.value = s }, name = stringResource(R.string.confirm_password), isPassword = true)
+            InputField(
+                state = viewModel.confirmPassword.observeAsState(),
+                valChange = { viewModel.setConfirmPassword(it) }, name = stringResource(R.string.confirm_password),
+                isPassword = true
+            )
         }
+        Log.e("recompose", "========")
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -88,9 +104,16 @@ fun RegistrationScreen(
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            FirstButton(name = stringResource(R.string.register), state = inputNotEmpty, click = { navController.navigate(Screen.ScheduleScreen.route) } )
+            FirstButton(
+                name = stringResource(R.string.register),
+                state = viewModel.isCorrectData.observeAsState(false),
+                click = { navController.navigate(Screen.ScheduleScreen.route) }
+            )
             Spacer(modifier = Modifier.padding(5.dp))
-            SecondButton(name = stringResource(R.string.have_account), click = { navController.navigate(Screen.LoginScreen.route) })
+            SecondButton(
+                name = stringResource(R.string.have_account),
+                click = { navController.navigate(Screen.LoginScreen.route) }
+            )
         }
     }
 }

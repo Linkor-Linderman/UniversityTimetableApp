@@ -1,5 +1,6 @@
 package com.example.universitytimetableapp.feature_profile.presentation.profile
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
+import com.example.universitytimetableapp.common.Constants
 import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.ui.theme.Jura
 import com.example.universitytimetableapp.ui.theme.Zekton
@@ -83,7 +85,11 @@ fun ProfileScreen(
                 backgroundColor = brown
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navController.navigate("${Screen.ChoosingScreen.route}/${Constants.CHOOSE_SCHEDULE}")
+                        },
                     horizontalArrangement = Arrangement.End
                 ) {
                     Text(
@@ -93,13 +99,13 @@ fun ProfileScreen(
                         fontSize = 17.sp,
                         color = Color.White
                     )
-                    Spacer(modifier = Modifier.fillMaxWidth(0.25f))
-                    IconButton(onClick = { navController.navigate(Screen.ChoosingScreen.route) }) {
-                        Icon(imageVector = ImageVector.vectorResource(R.drawable.choice_arrow),
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
+                    Spacer(modifier = Modifier.fillMaxWidth(0.35f))
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.choice_arrow),
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.padding(end = 25.dp).align(Alignment.CenterVertically)
+                    )
                 }
             }
         }

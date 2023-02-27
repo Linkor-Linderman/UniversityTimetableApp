@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
+import com.example.universitytimetableapp.common.Constants
 import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.ui.theme.Jura
 import com.example.universitytimetableapp.ui.theme.Zekton
@@ -110,7 +111,7 @@ fun FirstScreen(
                 Spacer(modifier = Modifier.padding(8.dp))
 
                 TextButton(
-                    onClick = { navController.navigate(Screen.ChoosingScreen.route) },
+                    onClick = { navController.navigate("${Screen.ChoosingScreen.route}/${Constants.CHANGE_INIT_CHOICE_OR_GUEST}") },
                     modifier = Modifier.size(180.dp, 40.dp)
                 ) {
                     Text(
