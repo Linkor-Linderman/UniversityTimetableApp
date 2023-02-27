@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.common.Screen
@@ -30,7 +30,7 @@ import com.example.universitytimetableapp.ui.theme.*
 @Composable
 fun ChoosingScreen(
     navController: NavController,
-    viewModel: ChoosingViewModel = viewModel()
+    viewModel: ChoosingViewModel = hiltViewModel()
 ) {
     Box(
         modifier = Modifier
