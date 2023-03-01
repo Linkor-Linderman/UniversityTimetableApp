@@ -3,8 +3,8 @@ package com.example.universitytimetableapp.feature_application_login.presentatio
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.ColorPainter
@@ -13,8 +13,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
+import com.example.universitytimetableapp.common.Constants
 import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_application_login.presentation.FirstButton
 import com.example.universitytimetableapp.feature_application_login.presentation.InputField
@@ -23,13 +25,14 @@ import com.example.universitytimetableapp.ui.theme.greyTint
 
 @Composable
 fun LoginScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
-    val login = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
-    val inputNotEmpty = remember { mutableStateOf(false) }
-
-    inputNotEmpty.value = login.value.isNotEmpty() && password.value.isNotEmpty()
+    val state by viewModel.uiState.observeAsState()
+    if (state!!.mayNavigate) {
+        viewModel.setDefaultState()
+        navController.navigate(state!!.destinationString)
+    }
 
     Box(
         modifier = Modifier
@@ -64,9 +67,9 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(30.dp)
         ) {
-            InputField(state = login, valChange = {s -> login.value = s }, name = stringResource(R.string.login))
+            InputField(state = viewModel.login.observeAsState(""), valChange = { viewModel.setLogin(it) }, name = stringResource(R.string.login))
             Spacer(modifier = Modifier.padding(8.dp))
-            InputField(state = password, valChange = {s -> password.value = s }, name = stringResource(R.string.password), isPassword = true)
+            InputField(state = viewModel.password.observeAsState(""), valChange = { viewModel.setPassword(it) }, name = stringResource(R.string.password), isPassword = true)
         }
         Column(
             modifier = Modifier
@@ -76,10 +79,13 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            FirstButton(name = stringResource(R.string.enter), state = inputNotEmpty,
-                click = { navController.navigate(Screen.ScheduleScreen.route) })
+            FirstButton(name = stringResource(R.string.enter), state = viewModel.isCorrectData.observeAsState(false),
+                click = { viewModel.goToNextScreen() }
+            )
             Spacer(modifier = Modifier.padding(5.dp))
-            SecondButton(name = stringResource(R.string.have_not_account), click = { navController.navigate(Screen.ChoosingScreen.route) })
+            SecondButton(name = stringResource(R.string.have_not_account),
+                click = { navController.navigate("${Screen.ChoosingScreen.route}/${Constants.REGISTER}") }
+            )
         }
     }
 }

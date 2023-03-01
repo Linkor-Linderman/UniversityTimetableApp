@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
+import com.example.universitytimetableapp.common.Constants
 import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_profile.presentation.ChangePasswordField
 import com.example.universitytimetableapp.feature_profile.presentation.ProfileButton
@@ -118,7 +119,9 @@ fun MainProfile(padding: PaddingValues, navController: NavController) {
             verticalAlignment = Alignment.Bottom
         ) {
             if (isStudent) {
-                ProfileButton(name = stringResource(R.string.change_group), click = {navController.navigate(Screen.ChoosingScreen.route)})
+                ProfileButton(name = stringResource(R.string.change_group),
+                    click = {navController.navigate("${Screen.ChoosingScreen.route}/${Constants.CHANGE_GROUP}?${Constants.EMAIL}=test@mail.ru")}
+                )
             }
             ProfileButton(name = stringResource(R.string.change_password), click = { showDialog = true })
         }
