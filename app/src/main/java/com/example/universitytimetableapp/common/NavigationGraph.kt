@@ -29,9 +29,10 @@ fun NavigationGraph(
             FirstScreen(navController)
         }
         composable(
-            route = "${Screen.ChoosingScreen.route}/{${Constants.CASE}}",
+            route = "${Screen.ChoosingScreen.route}/{${Constants.CASE}}?${Constants.EMAIL}={${Constants.EMAIL}}",
             arguments = listOf(
-                navArgument(Constants.CASE) { type = NavType.StringType }
+                navArgument(Constants.CASE) { type = NavType.StringType },
+                navArgument(Constants.EMAIL) { defaultValue = "" }
             )
         ) {
             ChoosingScreen(navController)
@@ -42,11 +43,11 @@ fun NavigationGraph(
             LoginScreen(navController)
         }
         composable(
-            route = "${Screen.RegistrationScreen.route}/{${Constants.TYPE_USER}}/{${Constants.ID}}?${Constants.TEACHER_NAME}={${Constants.TEACHER_NAME}}",
+            route = "${Screen.RegistrationScreen.route}/{${Constants.TYPE_USER}}/{${Constants.ID}}/{${Constants.TEACHER_GROUP_NAME}}",
             arguments = listOf(
                 navArgument(Constants.TYPE_USER) { type = NavType.StringType },
                 navArgument(Constants.ID) { type = NavType.StringType },
-                navArgument(Constants.TEACHER_NAME) { defaultValue = "" }
+                navArgument(Constants.TEACHER_GROUP_NAME) { type = NavType.StringType }
             )
         ) {
             RegistrationScreen(navController)
@@ -57,7 +58,12 @@ fun NavigationGraph(
             ProfileScreen(navController)
         }
         composable(
-            route = Screen.ScheduleScreen.route
+            route = "${Screen.ScheduleScreen.route}/{${Constants.TYPE_USER}}/{${Constants.ID}}/{${Constants.TEACHER_GROUP_NAME}}",
+            arguments = listOf(
+                navArgument(Constants.TYPE_USER) { type = NavType.StringType },
+                navArgument(Constants.ID) { type = NavType.StringType },
+                navArgument(Constants.TEACHER_GROUP_NAME) { type = NavType.StringType }
+            )
         ) {
             ScheduleScreen(navController)
         }

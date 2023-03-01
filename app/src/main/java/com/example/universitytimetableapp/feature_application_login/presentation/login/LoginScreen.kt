@@ -3,6 +3,7 @@ package com.example.universitytimetableapp.feature_application_login.presentatio
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +28,12 @@ fun LoginScreen(
     navController: NavController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val state by viewModel.uiState.observeAsState()
+    if (state!!.mayNavigate) {
+        viewModel.setDefaultState()
+        navController.navigate(state!!.destinationString)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -73,7 +80,7 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             FirstButton(name = stringResource(R.string.enter), state = viewModel.isCorrectData.observeAsState(false),
-                click = { navController.navigate(Screen.ScheduleScreen.route) }
+                click = { viewModel.goToNextScreen() }
             )
             Spacer(modifier = Modifier.padding(5.dp))
             SecondButton(name = stringResource(R.string.have_not_account),

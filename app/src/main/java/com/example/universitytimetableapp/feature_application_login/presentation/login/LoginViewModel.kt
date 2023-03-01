@@ -3,6 +3,8 @@ package com.example.universitytimetableapp.feature_application_login.presentatio
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.universitytimetableapp.common.Constants
+import com.example.universitytimetableapp.common.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -28,6 +30,18 @@ class LoginViewModel @Inject constructor(
     fun setPassword(value: String) {
         _password.value = value
         correctData()
+    }
+
+    fun goToNextScreen() {
+        _uiState.value = _uiState.value!!.copy(
+            mayNavigate = true,
+            // Временно, пока нет SharedPreferences и запросов
+            destinationString = "${Screen.ScheduleScreen.route}/${Constants.TEACHER}/123id/Даммер Д Д"
+        )
+    }
+
+    fun setDefaultState() {
+        _uiState.value = _uiState.value!!.copy(mayNavigate = false)
     }
 
     private fun correctData() {

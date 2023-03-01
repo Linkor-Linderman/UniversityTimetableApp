@@ -1,6 +1,6 @@
 package com.example.universitytimetableapp.feature_application_login.presentation.choice
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,7 +11,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -19,9 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.common.Constants
+import com.example.universitytimetableapp.feature_application_login.presentation.InfoDialog
 import com.example.universitytimetableapp.ui.theme.*
 
 @Composable
@@ -29,6 +28,7 @@ fun ChoosingGroupOrTeacher(viewModel: ChoosingViewModel) {
     val text by viewModel.search.collectAsState()
     val list by viewModel.listWithFilter.collectAsState()
     val chosenRole by viewModel.chosenRole.observeAsState()
+    val chosenIndex by viewModel.choosingIndex.observeAsState()
 
     Column(
         modifier = Modifier
@@ -103,9 +103,10 @@ fun ChoosingGroupOrTeacher(viewModel: ChoosingViewModel) {
                 Text(
                     text = list[i],
                     fontFamily = Jura,
-                    fontWeight = if (i == 2) FontWeight.Bold else FontWeight.Normal,
+                    fontWeight = if (i == chosenIndex) FontWeight.Bold else FontWeight.Normal,
                     fontSize = 15.sp,
-                    color = if (i == 2) Color.White else white90
+                    color = if (i == chosenIndex) Color.White else white90,
+                    modifier = Modifier.clickable { viewModel.setChoosingIndex(i) }
                 )
                 Divider(color = white30, thickness = 1.dp)
             }
@@ -145,43 +146,9 @@ fun ChoosingGroupOrTeacher(viewModel: ChoosingViewModel) {
     }
 
     if (viewModel.uiState.value!!.isShowDialog) {
-        Dialog(onDismissRequest = { }) {
-            Column(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color.White)
-                    .padding(10.dp, 25.dp, 10.dp, 10.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(R.string.wait_confirmation_group, "fil_master@gmail.com"),
-                    modifier = Modifier.width(250.dp),
-                    fontFamily = Jura,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 17.sp,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.padding(15.dp))
-                Button(
-                    onClick = {
-                        viewModel.goToNextScreen()
-                    },
-                    modifier = Modifier
-                        .size(180.dp, 40.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = brown
-                    )
-                ) {
-                    Text(
-                        text = stringResource(R.string.ok),
-                        fontFamily = Zekton,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 15.sp,
-                        color = Color.White
-                    )
-                }
-            }
-        }
+        InfoDialog(
+            text = stringResource(R.string.wait_confirmation_group, viewModel.studentEmail),
+            close = { viewModel.goToNextScreen() }
+        )
     }
 }

@@ -15,6 +15,8 @@ class ChoosingViewModel @Inject constructor(
 ) : ViewModel() {
 
     val case: String
+    val studentEmail: String
+
     private val _chosenRole = MutableLiveData("")
     val chosenRole: LiveData<String> = _chosenRole
 
@@ -25,6 +27,12 @@ class ChoosingViewModel @Inject constructor(
     val search: StateFlow<String> = _search
     fun setSearch(value: String) {
         _search.value = value
+    }
+
+    private val _choosingIndex = MutableLiveData<Int>()
+    val choosingIndex: LiveData<Int> = _choosingIndex
+    fun setChoosingIndex(value: Int) {
+        _choosingIndex.value = value
     }
 
     private val _listWithFilter = MutableStateFlow(_uiState.value?.itemList ?: listOf())
@@ -50,12 +58,17 @@ class ChoosingViewModel @Inject constructor(
         if (case == Constants.CHANGE_GROUP) {
             _uiState.value = ChoosingUiState(isRoleChosen = true)
             _chosenRole.value = Constants.STUDENT
+            studentEmail = checkNotNull(savedStateHandle[Constants.EMAIL])
+        }
+        else {
+            studentEmail = ""
         }
     }
 
     fun choosingRole(role: String) {
         _uiState.value = _uiState.value!!.copy(isRoleChosen = true)
         _chosenRole.value = role
+        _choosingIndex.value = -1
         if (role == Constants.STUDENT) {
             //fetchGroup
         }
@@ -78,6 +91,9 @@ class ChoosingViewModel @Inject constructor(
 
 
     fun goToNextScreen() {
+        if ((_choosingIndex.value ?: -1) < 0) {
+            return
+        }
         if (_uiState.value!!.isShowDialog) {
             _uiState.value = _uiState.value!!.copy(
                 isShowDialog = false,
@@ -101,13 +117,12 @@ class ChoosingViewModel @Inject constructor(
     private fun destinationFromCase(): String {
         return when (case) {
             Constants.REGISTER -> {
-                if (_chosenRole.value == Constants.TEACHER)
-                    "${Screen.RegistrationScreen.route}/${_chosenRole.value}/123id?${Constants.TEACHER_NAME}=Даммер Д Д"
-                else
-                    "${Screen.RegistrationScreen.route}/${_chosenRole.value}/123id"
+                    "${Screen.RegistrationScreen.route}/${_chosenRole.value}/123id/Даммер Д Д"
             }
             Constants.CHANGE_GROUP -> Screen.ProfileScreen.route
-            else -> Screen.ScheduleScreen.route
+            else -> {
+                    "${Screen.ScheduleScreen.route}/${_chosenRole.value}/123id/Даммер Д Д"
+            }
         }
     }
 }

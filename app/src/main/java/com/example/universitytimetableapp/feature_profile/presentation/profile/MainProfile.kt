@@ -120,7 +120,7 @@ fun MainProfile(padding: PaddingValues, navController: NavController) {
         ) {
             if (isStudent) {
                 ProfileButton(name = stringResource(R.string.change_group),
-                    click = {navController.navigate("${Screen.ChoosingScreen.route}/${Constants.CHANGE_GROUP}")}
+                    click = {navController.navigate("${Screen.ChoosingScreen.route}/${Constants.CHANGE_GROUP}?${Constants.EMAIL}=test@mail.ru")}
                 )
             }
             ProfileButton(name = stringResource(R.string.change_password), click = { showDialog = true })

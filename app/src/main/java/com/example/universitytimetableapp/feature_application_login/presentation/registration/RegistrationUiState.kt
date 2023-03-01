@@ -5,5 +5,6 @@ data class RegistrationUiState(
     val isShowMessage: Boolean = false,
     val message: String = "",
     val isShowDialog: Boolean = false,
-    val mayNavigate: Boolean = false
+    val mayNavigate: Boolean = false,
+    val destinationString: String = ""
 )

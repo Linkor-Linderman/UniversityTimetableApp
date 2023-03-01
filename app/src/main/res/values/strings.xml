@@ -23,6 +23,7 @@
     <string name="full_name">ФИО</string>
     <string name="confirm">Подтвердить</string>
     <string name="wait_confirmation_group">Ожидайте подтверждения смены группы на почту %1$s</string>
+    <string name="wait_confirmation_registration">Ожидайте подтверждения регистрации на почту %1$s</string>
     <string name="ok">Ок</string>
     <string name="login">Логин</string>
     <string name="password">Пароль</string>

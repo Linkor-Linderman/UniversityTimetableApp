@@ -1,11 +1,11 @@
 package com.example.universitytimetableapp.feature_application_login.presentation.registration
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +21,7 @@ import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.common.Constants
 import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_application_login.presentation.FirstButton
+import com.example.universitytimetableapp.feature_application_login.presentation.InfoDialog
 import com.example.universitytimetableapp.feature_application_login.presentation.InputField
 import com.example.universitytimetableapp.feature_application_login.presentation.SecondButton
 import com.example.universitytimetableapp.ui.theme.greyTint
@@ -30,6 +31,12 @@ fun RegistrationScreen(
     navController: NavController,
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
+    val state by viewModel.uiState.observeAsState()
+    if (state!!.mayNavigate) {
+        viewModel.setDefaultState()
+        navController.navigate(state!!.destinationString)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -95,7 +102,6 @@ fun RegistrationScreen(
                 isPassword = true
             )
         }
-        Log.e("recompose", "========")
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -107,7 +113,7 @@ fun RegistrationScreen(
             FirstButton(
                 name = stringResource(R.string.register),
                 state = viewModel.isCorrectData.observeAsState(false),
-                click = { navController.navigate(Screen.ScheduleScreen.route) }
+                click = { viewModel.goToNextScreen() }
             )
             Spacer(modifier = Modifier.padding(5.dp))
             SecondButton(
@@ -115,5 +121,12 @@ fun RegistrationScreen(
                 click = { navController.navigate(Screen.LoginScreen.route) }
             )
         }
+    }
+
+    if (viewModel.uiState.value!!.isShowDialog) {
+        InfoDialog(
+            text = stringResource(R.string.wait_confirmation_registration, viewModel.email.observeAsState().value!!),
+            close = { viewModel.goToNextScreen() }
+        )
     }
 }

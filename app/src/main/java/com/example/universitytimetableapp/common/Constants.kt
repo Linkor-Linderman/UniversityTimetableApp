@@ -10,5 +10,6 @@ object Constants {
     const val CASE = "case"
     const val TYPE_USER = "typeUser"
     const val ID = "id"
-    const val TEACHER_NAME = "teacherName"
+    const val TEACHER_GROUP_NAME = "teacherName"
+    const val EMAIL = "email"
 }
