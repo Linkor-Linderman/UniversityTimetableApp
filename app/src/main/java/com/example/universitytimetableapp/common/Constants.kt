@@ -12,4 +12,6 @@ object Constants {
     const val ID = "id"
     const val TEACHER_GROUP_NAME = "teacherName"
     const val EMAIL = "email"
+    const val LOGIN = "login"
+    const val EXIT = "exit"
 }

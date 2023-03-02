@@ -78,12 +78,9 @@ class RegistrationViewModel @Inject constructor(
     }
 
     private fun correctData() {
-        if (_surname.value!!.isNotEmpty() && _name.value!!.isNotEmpty() && _patronymic.value!!.isNotEmpty() &&
-            _email.value!!.isNotEmpty() && _password.value!!.isNotEmpty() &&
-            _confirmPassword.value!!.isNotEmpty() && _password.value == _confirmPassword.value
-        ) {
-            _isCorrectData.value = true
-        }
+        _isCorrectData.value = _surname.value!!.isNotEmpty() && _name.value!!.isNotEmpty() && _patronymic.value!!.isNotEmpty() &&
+                _email.value!!.isNotEmpty() && _password.value!!.isNotEmpty() &&
+                _confirmPassword.value!!.isNotEmpty() && _password.value == _confirmPassword.value
     }
 
     fun goToNextScreen() {

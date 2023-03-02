@@ -9,16 +9,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.common.Constants
-import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_profile.presentation.FillProfileButton
 import com.example.universitytimetableapp.feature_profile.presentation.ProfileButton
 import com.example.universitytimetableapp.ui.theme.Jura
 
 @Composable
-fun GuestProfile(padding: PaddingValues, navController: NavController) {
+fun GuestProfile(
+    padding: PaddingValues,
+    viewModel: ProfileViewModel
+) {
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -35,10 +36,10 @@ fun GuestProfile(padding: PaddingValues, navController: NavController) {
         )
 
         Spacer(modifier = Modifier.fillMaxHeight(0.2f))
-        FillProfileButton(name = stringResource(R.string.entrance), click = {navController.navigate(Screen.LoginScreen.route)})
+        FillProfileButton(name = stringResource(R.string.entrance), click = { viewModel.goToNextScreen(Constants.LOGIN) })
         Spacer(modifier = Modifier.padding(10.dp))
         FillProfileButton(name = stringResource(R.string.registration),
-            click = {navController.navigate("${Screen.ChoosingScreen.route}/${Constants.REGISTER}")}
+            click = { viewModel.goToNextScreen(Constants.REGISTER) }
         )
 
         Box(
@@ -49,7 +50,8 @@ fun GuestProfile(padding: PaddingValues, navController: NavController) {
             contentAlignment = Alignment.BottomCenter
         ) {
             ProfileButton(name = stringResource(R.string.change_initial_choice),
-                click = {navController.navigate("${Screen.ChoosingScreen.route}/${Constants.CHANGE_INIT_CHOICE_OR_GUEST}")})
+                click = { viewModel.goToNextScreen(Constants.CHANGE_INIT_CHOICE_OR_GUEST) }
+            )
         }
     }
 }

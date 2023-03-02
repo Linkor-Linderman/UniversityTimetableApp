@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -16,19 +18,20 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.common.Constants
-import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.ui.theme.Jura
 import com.example.universitytimetableapp.ui.theme.Zekton
 import com.example.universitytimetableapp.ui.theme.brown
 
 @Composable
 fun ProfileScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: ProfileViewModel = hiltViewModel()
 ) {
-    val isGuest = false
+    val state by viewModel.uiState.observeAsState()
 
     Scaffold(
         topBar = {
@@ -62,9 +65,9 @@ fun ProfileScreen(
                         color = Color.White
                     )
                     TextButton(
-                        onClick = { navController.navigate(Screen.FirstScreen.route) },
-                        modifier = Modifier.alpha(if (isGuest) 0f else 1f),
-                        enabled = !isGuest
+                        onClick = { viewModel.goToNextScreen(Constants.EXIT) },
+                        modifier = Modifier.alpha(if (state!!.isGuest) 0f else 1f),
+                        enabled = !state!!.isGuest
                     ) {
                         Text(
                             text = stringResource(R.string.exit),
@@ -88,7 +91,7 @@ fun ProfileScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            navController.navigate("${Screen.ChoosingScreen.route}/${Constants.CHOOSE_SCHEDULE}")
+                            viewModel.goToNextScreen(Constants.CHOOSE_SCHEDULE)
                         },
                     horizontalArrangement = Arrangement.End
                 ) {
@@ -104,17 +107,23 @@ fun ProfileScreen(
                         imageVector = ImageVector.vectorResource(R.drawable.choice_arrow),
                         contentDescription = null,
                         tint = Color.White,
-                        modifier = Modifier.padding(end = 25.dp).align(Alignment.CenterVertically)
+                        modifier = Modifier
+                            .padding(end = 25.dp)
+                            .align(Alignment.CenterVertically)
                     )
                 }
             }
         }
     ) { padding ->
-        if (isGuest) {
-            GuestProfile(padding = padding, navController)
+        if (state!!.mayNavigate) {
+            viewModel.setDefaultState()
+            navController.navigate(state!!.destinationString)
+        }
+        if (state!!.isGuest) {
+            GuestProfile(padding = padding, viewModel)
         }
         else {
-            MainProfile(padding = padding, navController)
+            MainProfile(padding = padding, viewModel)
         }
     }
 }

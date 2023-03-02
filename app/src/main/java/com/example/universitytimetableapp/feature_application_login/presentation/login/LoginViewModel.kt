@@ -45,8 +45,6 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun correctData() {
-        if (_login.value!!.isNotEmpty() && _password.value!!.isNotEmpty()) {
-            _isCorrectData.value = true
-        }
+        _isCorrectData.value = _login.value!!.isNotEmpty() && _password.value!!.isNotEmpty()
     }
 }
