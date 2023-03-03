@@ -49,4 +49,18 @@
     <string name="old_password">Старый пароль</string>
     <string name="new_password">Новый пароль</string>
     <string name="changing">Сменить</string>
+
+    <string name="January">Январь</string>
+    <string name="February">Февраль</string>
+    <string name="March">Март</string>
+    <string name="April">Апрель</string>
+    <string name="May">Май</string>
+    <string name="June">Июнь</string>
+    <string name="July">Июль</string>
+    <string name="August">Август</string>
+    <string name="September">Сентябрь</string>
+    <string name="October">Октябрь</string>
+    <string name="November">Ноябрь</string>
+    <string name="December">Декабрь</string>
+    <string name="couple">Пара</string>
 </resources>

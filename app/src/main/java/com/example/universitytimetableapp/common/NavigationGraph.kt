@@ -9,8 +9,8 @@ import com.example.universitytimetableapp.feature_application_login.presentation
 import com.example.universitytimetableapp.feature_application_login.presentation.login.LoginScreen
 import com.example.universitytimetableapp.feature_application_login.presentation.registration.RegistrationScreen
 import com.example.universitytimetableapp.feature_profile.presentation.profile.ProfileScreen
-import com.example.universitytimetableapp.feature_schedule.presentation.DetailClassInformationScreen
-import com.example.universitytimetableapp.feature_schedule.presentation.ScheduleScreen
+import com.example.universitytimetableapp.feature_schedule.presentation.detail_class_information_screen.DetailClassInformationScreen
+import com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.ScheduleScreen
 
 @Composable
 fun NavigationGraph(

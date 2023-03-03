@@ -1,4 +1,4 @@
-package com.example.universitytimetableapp.feature_schedule.presentation.composable
+package com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.composable
 
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon

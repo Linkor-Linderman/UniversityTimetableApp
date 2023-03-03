@@ -98,4 +98,7 @@ dependencies {
 
     //Flow layout
     implementation "com.google.accompanist:accompanist-flowlayout:0.27.0"
+
+    //Joda-Time
+    implementation 'net.danlew:android.joda:2.12.1.1'
 }

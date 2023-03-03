@@ -1,4 +1,4 @@
-package com.example.universitytimetableapp.feature_schedule.presentation.composable.cards
+package com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.composable.cards
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

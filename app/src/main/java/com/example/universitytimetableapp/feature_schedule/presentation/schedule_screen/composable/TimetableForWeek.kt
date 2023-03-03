@@ -1,4 +1,4 @@
-package com.example.universitytimetableapp.feature_schedule.presentation.composable
+package com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.composable
 
 
 import androidx.compose.animation.Animatable
@@ -16,10 +16,13 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
+import com.example.universitytimetableapp.common.Screen
+import com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.ScheduleScreenEvent
+import com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.ScheduleScreenState
 import com.example.universitytimetableapp.ui.theme.Zekton
 import com.example.universitytimetableapp.ui.theme.brown
 import com.example.universitytimetableapp.ui.theme.greyForSelectedDay
@@ -29,12 +32,14 @@ import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
 @ExperimentalPagerApi
-@Preview
 @Composable
 fun TimeTableForWeek(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    state: ScheduleScreenState,
+    onEvent: (ScheduleScreenEvent) -> Unit,
+    navController: NavController
 ) {
-    val numberOfDaysOfTheWeek = listOf(1, 2, 3, 4, 5, 6, 7)
+
     val nameOfDaysOfTheWeek = listOf(
         stringResource(id = R.string.monday),
         stringResource(id = R.string.tuesday),
@@ -48,12 +53,13 @@ fun TimeTableForWeek(
         pageCount = nameOfDaysOfTheWeek.size,
         initialOffscreenLimit = 3,
         infiniteLoop = true,
-        initialPage = 0,
+        initialPage = state.initialDay.dayOfWeek - 1,
     )
     val tabIndex = remember {
         mutableStateOf(pagerState.currentPage)
     }
     val coroutineScope = rememberCoroutineScope()
+
     Column(
         modifier = modifier
     ) {
@@ -76,7 +82,15 @@ fun TimeTableForWeek(
             contentColor = Color.Transparent
         ) {
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    onEvent(ScheduleScreenEvent.ChangeToPreviousWeek)
+                    coroutineScope.launch {
+                        pagerState.scrollToPage(
+                            page = 0,
+                            pageOffset = 0f,
+                        )
+                    }
+                },
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.left_arrow),
@@ -84,21 +98,26 @@ fun TimeTableForWeek(
                     tint = Color.White
                 )
             }
-            nameOfDaysOfTheWeek.forEachIndexed { index, day ->
+            state.currentDaysNumber.forEachIndexed { index, day ->
                 val color = remember {
                     Animatable(Color.Transparent)
                 }
                 LaunchedEffect(
-                    pagerState.currentPage == index
+                    pagerState.currentPage == index  && !pagerState.isScrollInProgress,
+                    pagerState.isScrollInProgress && pagerState.targetPage == index
                 ) {
                     color.animateTo(
-                        if (pagerState.currentPage == index)
+                        if (pagerState.currentPage == index && !pagerState.isScrollInProgress  || pagerState.isScrollInProgress && pagerState.targetPage == index)
                             greyForSelectedDay
                         else
-                            Color.Transparent
+                            Color.Transparent,
                     )
                 }
-
+                LaunchedEffect(
+                    pagerState.currentPage == index
+                ) {
+                    onEvent(ScheduleScreenEvent.ChangeCurrentDay(state.currentDaysNumber[pagerState.currentPage]))
+                }
                 Tab(
                     modifier = Modifier,
                     selected = pagerState.currentPage == index,
@@ -107,7 +126,7 @@ fun TimeTableForWeek(
                             pagerState.animateScrollToPage(
                                 page = index,
                                 pageOffset = 0f,
-                                animationSpec = tween(350),
+                                animationSpec = tween(250),
                                 skipPages = true
                             )
                         }
@@ -141,8 +160,8 @@ fun TimeTableForWeek(
                                 contentAlignment = Center
                             ) {
                                 Text(
-                                    text = numberOfDaysOfTheWeek[index].toString(),
-                                    fontSize = 15.sp,
+                                    text = state.currentDaysNumber[index].dayOfMonth().asString,
+                                    fontSize = 14.sp,
                                     fontFamily = Zekton,
                                     color = Color.White,
                                 )
@@ -152,7 +171,15 @@ fun TimeTableForWeek(
                 )
             }
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    onEvent(ScheduleScreenEvent.ChangeToNextWeek)
+                    coroutineScope.launch {
+                        pagerState.scrollToPage(
+                            page = 0,
+                            pageOffset = 0f,
+                        )
+                    }
+                },
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.right_arrow),
@@ -168,7 +195,10 @@ fun TimeTableForWeek(
             TimetablePageForDay(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 18.dp, vertical = 20.dp)
+                    .padding(horizontal = 18.dp, vertical = 20.dp),
+                onClickToClassCard = {
+                    navController.navigate(Screen.DetailClassInformationScreen.route)
+                }
             )
         }
     }

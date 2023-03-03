@@ -1,5 +1,6 @@
-package com.example.universitytimetableapp.feature_schedule.presentation.composable.cards
+package com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.composable.cards
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -13,15 +14,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.universitytimetableapp.R
-import com.example.universitytimetableapp.feature_schedule.presentation.composable.RowWithTextAndIcon
+import com.example.universitytimetableapp.feature_schedule.presentation.common_composable.RowWithTextAndIcon
 import com.example.universitytimetableapp.ui.theme.Jura
 
-@Preview
 @Composable
-fun SubjectTimeslotCard() {
+fun SubjectTimeslotCard(
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+                onClick()
+            },
         backgroundColor = Color.LightGray,
         elevation = 0.dp,
         shape = RoundedCornerShape(10.dp),
