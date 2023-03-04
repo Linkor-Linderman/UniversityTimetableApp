@@ -14,4 +14,7 @@ object Constants {
     const val EMAIL = "email"
     const val LOGIN = "login"
     const val EXIT = "exit"
+    const val BASE_URL = "http://81.177.196.180:48656/"
+    const val PREFERENCE_NAME = "shared"
+    const val TOKEN = "token"
 }
