@@ -1,8 +1,8 @@
 package com.example.universitytimetableapp.common
 
 object Constants {
-    const val STUDENT = "student"
-    const val TEACHER = "teacher"
+    const val STUDENT = "Student"
+    const val TEACHER = "Teacher"
     const val REGISTER = "register"
     const val CHOOSE_SCHEDULE = "chooseSchedule"
     const val CHANGE_GROUP = "changeGroup"

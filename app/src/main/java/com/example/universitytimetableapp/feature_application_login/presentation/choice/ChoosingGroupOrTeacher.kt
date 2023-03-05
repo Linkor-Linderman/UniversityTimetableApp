@@ -28,7 +28,7 @@ fun ChoosingGroupOrTeacher(viewModel: ChoosingViewModel) {
     val text by viewModel.search.collectAsState()
     val list by viewModel.listWithFilter.collectAsState()
     val chosenRole by viewModel.chosenRole.observeAsState()
-    val chosenIndex by viewModel.choosingIndex.observeAsState()
+    val chosenItem by viewModel.choosingItem.observeAsState()
 
     Column(
         modifier = Modifier
@@ -101,12 +101,12 @@ fun ChoosingGroupOrTeacher(viewModel: ChoosingViewModel) {
         ) {
             items(list.size) { i ->
                 Text(
-                    text = list[i],
+                    text = list[i].name,
                     fontFamily = Jura,
-                    fontWeight = if (i == chosenIndex) FontWeight.Bold else FontWeight.Normal,
+                    fontWeight = if (list[i].id == chosenItem?.id) FontWeight.Bold else FontWeight.Normal,
                     fontSize = 15.sp,
-                    color = if (i == chosenIndex) Color.White else white90,
-                    modifier = Modifier.clickable { viewModel.setChoosingIndex(i) }
+                    color = if (list[i].id == chosenItem?.id) Color.White else white90,
+                    modifier = Modifier.clickable { viewModel.setChoosingItem(i) }
                 )
                 Divider(color = white30, thickness = 1.dp)
             }

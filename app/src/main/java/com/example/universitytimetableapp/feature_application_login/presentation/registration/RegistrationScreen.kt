@@ -113,7 +113,7 @@ fun RegistrationScreen(
             FirstButton(
                 name = stringResource(R.string.register),
                 state = viewModel.isCorrectData.observeAsState(false),
-                click = { viewModel.goToNextScreen() }
+                click = { viewModel.register()}
             )
             Spacer(modifier = Modifier.padding(5.dp))
             SecondButton(

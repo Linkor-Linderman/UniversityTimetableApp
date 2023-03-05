@@ -1,17 +1,26 @@
 package com.example.universitytimetableapp.feature_application_login.presentation.registration
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.universitytimetableapp.common.Constants
 import com.example.universitytimetableapp.common.Screen
+import com.example.universitytimetableapp.feature_application_login.domain.model.StudentRegistration
+import com.example.universitytimetableapp.feature_application_login.domain.model.TeacherRegistration
+import com.example.universitytimetableapp.feature_application_login.domain.model.UserSettings
+import com.example.universitytimetableapp.feature_application_login.domain.use_case.IsEmailFormatUseCase
+import com.example.universitytimetableapp.feature_application_login.domain.use_case.PutUserSettingsUseCase
+import com.example.universitytimetableapp.feature_application_login.domain.use_case.RegisterStudentUseCase
+import com.example.universitytimetableapp.feature_application_login.domain.use_case.RegisterTeacherUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val isEmailFormatUseCase: IsEmailFormatUseCase,
+    private val registerTeacherUseCase: RegisterTeacherUseCase,
+    private val registerStudentUseCase: RegisterStudentUseCase,
+    private val putUserSettingsUseCase: PutUserSettingsUseCase
 ) : ViewModel() {
     val role: String
     private val groupOrTeacherId: String
@@ -77,10 +86,46 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun correctData() {
-        _isCorrectData.value = _surname.value!!.isNotEmpty() && _name.value!!.isNotEmpty() && _patronymic.value!!.isNotEmpty() &&
-                _email.value!!.isNotEmpty() && _password.value!!.isNotEmpty() &&
-                _confirmPassword.value!!.isNotEmpty() && _password.value == _confirmPassword.value
+    fun register() {
+        if (!isEmailFormatUseCase(_email.value!!)) {
+            return
+        }
+        viewModelScope.launch {
+            if (role == Constants.TEACHER) {
+                registerTeacherUseCase(
+                    TeacherRegistration(
+                        teacherId = groupOrTeacherId,
+                        email = _email.value!!,
+                        password = _password.value!!
+                    )
+                ).collect { result ->
+                    result.onSuccess {
+                        saveSettings()
+                        goToNextScreen()
+                    }.onFailure {
+
+                    }
+                }
+            } else {
+                registerStudentUseCase(
+                    StudentRegistration(
+                        surname = _surname.value!!,
+                        name = _name.value!!,
+                        patronymic = _patronymic.value!!,
+                        groupId = groupOrTeacherId,
+                        email = _email.value!!,
+                        password = _password.value!!
+                    )
+                ).collect { result ->
+                    result.onSuccess {
+                        saveSettings()
+                        goToNextScreen()
+                    }.onFailure {
+
+                    }
+                }
+            }
+        }
     }
 
     fun goToNextScreen() {
@@ -88,8 +133,7 @@ class RegistrationViewModel @Inject constructor(
             _uiState.value = _uiState.value!!.copy(
                 isShowDialog = false,
                 mayNavigate = true,
-                // Временно, пока нет SharedPreferences и запросов
-                destinationString = "${Screen.ScheduleScreen.route}/$role/$groupOrTeacherId/Даммер Д Д"
+                destinationString = "${Screen.ScheduleScreen.route}/$role/$groupOrTeacherId/$groupOrTeacherName"
             )
         }
         else {
@@ -99,5 +143,19 @@ class RegistrationViewModel @Inject constructor(
 
     fun setDefaultState() {
         _uiState.value = _uiState.value!!.copy(mayNavigate = false)
+    }
+
+    private fun correctData() {
+        _isCorrectData.value = _surname.value!!.isNotEmpty() && _name.value!!.isNotEmpty() && _patronymic.value!!.isNotEmpty() &&
+                _email.value!!.isNotEmpty() && _password.value!!.isNotEmpty() &&
+                _confirmPassword.value!!.isNotEmpty() && _password.value == _confirmPassword.value
+    }
+
+    private fun saveSettings() {
+        putUserSettingsUseCase(UserSettings(
+            role = role,
+            idChosenItem = groupOrTeacherId,
+            nameChosenItem = groupOrTeacherName
+        ))
     }
 }

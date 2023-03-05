@@ -5,13 +5,13 @@ import com.example.universitytimetableapp.feature_application_login.domain.model
 data class TeacherDto(
     val firstName: String,
     val lastName: String,
-    val patronymicName: String,
+    val patronymicName: String?,
     val id: String
 ) {
     fun toGroupsTeachersItem(): GroupsTeachersItem {
         return GroupsTeachersItem(
             id = id,
-            name = "$lastName $firstName $patronymicName"
+            name = "$lastName $firstName ${patronymicName?: ""}"
         )
     }
 }

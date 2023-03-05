@@ -80,7 +80,7 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             FirstButton(name = stringResource(R.string.enter), state = viewModel.isCorrectData.observeAsState(false),
-                click = { viewModel.goToNextScreen() }
+                click = { viewModel.login() }
             )
             Spacer(modifier = Modifier.padding(5.dp))
             SecondButton(name = stringResource(R.string.have_not_account),

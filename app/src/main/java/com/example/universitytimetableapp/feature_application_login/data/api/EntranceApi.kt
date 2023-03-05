@@ -1,10 +1,8 @@
 package com.example.universitytimetableapp.feature_application_login.data.api
 
-import com.example.universitytimetableapp.feature_application_login.data.dto.CredentialsDto
-import com.example.universitytimetableapp.feature_application_login.data.dto.StudentRegisterDto
-import com.example.universitytimetableapp.feature_application_login.data.dto.TeacherRegisterDto
-import com.example.universitytimetableapp.feature_application_login.data.dto.TokenDto
+import com.example.universitytimetableapp.feature_application_login.data.dto.*
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface EntranceApi {
@@ -17,4 +15,7 @@ interface EntranceApi {
 
     @POST("api/v1/authorisation/student/sign-up")
     suspend fun registerStudent(@Body body: StudentRegisterDto)
+
+    @GET("api/v1/profile/me")
+    suspend fun getAccount(): AccountDto
 }

@@ -5,6 +5,7 @@ import com.example.universitytimetableapp.feature_application_login.data.api.Ent
 import com.example.universitytimetableapp.feature_application_login.data.dto.CredentialsDto
 import com.example.universitytimetableapp.feature_application_login.data.dto.StudentRegisterDto
 import com.example.universitytimetableapp.feature_application_login.data.dto.TeacherRegisterDto
+import com.example.universitytimetableapp.feature_application_login.domain.model.AccountInfo
 import com.example.universitytimetableapp.feature_application_login.domain.model.LoginCredentials
 import com.example.universitytimetableapp.feature_application_login.domain.model.StudentRegistration
 import com.example.universitytimetableapp.feature_application_login.domain.model.TeacherRegistration
@@ -51,6 +52,17 @@ class EntranceRepositoryImpl @Inject constructor(
         }
         catch (e: Exception) {
             Log.e("OPS registerStudent", e.message.toString())
+            emit(Result.failure(e))
+        }
+    }.flowOn(Dispatchers.IO)
+
+    override fun getAccountInfo(): Flow<Result<AccountInfo>> = flow {
+        try {
+            val account = api.getAccount().toAccountInfo()
+            emit(Result.success(account))
+        }
+        catch (e: Exception) {
+            Log.e("OPS getAccountInfo", e.message.toString())
             emit(Result.failure(e))
         }
     }.flowOn(Dispatchers.IO)

@@ -11,7 +11,7 @@ class AuthInterceptor @Inject constructor(
         val token = sharedPref.getString(Constants.TOKEN)
         val request = chain.request().newBuilder().apply {
             token?.let {
-                addHeader("Authorization", it)
+                addHeader("Authorization", "Bearer $it")
             }
         }.build()
         return chain.proceed(request)
