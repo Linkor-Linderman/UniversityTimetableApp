@@ -3,15 +3,22 @@ package com.example.universitytimetableapp.feature_application_login.presentatio
 import androidx.lifecycle.*
 import com.example.universitytimetableapp.common.Constants
 import com.example.universitytimetableapp.common.Screen
+import com.example.universitytimetableapp.feature_application_login.domain.model.GroupsTeachersItem
+import com.example.universitytimetableapp.feature_application_login.domain.model.UserSettings
+import com.example.universitytimetableapp.feature_application_login.domain.use_case.GetSelectionListUseCase
+import com.example.universitytimetableapp.feature_application_login.domain.use_case.PutUserSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class ChoosingViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val getSelectionListUseCase: GetSelectionListUseCase,
+    private val putUserSettingsUseCase: PutUserSettingsUseCase
 ) : ViewModel() {
 
     val case: String
@@ -29,13 +36,13 @@ class ChoosingViewModel @Inject constructor(
         _search.value = value
     }
 
-    private val _choosingIndex = MutableLiveData<Int>()
-    val choosingIndex: LiveData<Int> = _choosingIndex
-    fun setChoosingIndex(value: Int) {
-        _choosingIndex.value = value
+    private val _choosingItem = MutableLiveData<GroupsTeachersItem>(null)
+    val choosingItem: LiveData<GroupsTeachersItem> = _choosingItem
+    fun setChoosingItem(value: Int) {
+        _choosingItem.value = _listWithFilter.value[value]
     }
 
-    private val _listWithFilter = MutableStateFlow(_uiState.value?.itemList ?: listOf())
+    private val _listWithFilter = MutableStateFlow(listOf<GroupsTeachersItem>())
     val listWithFilter = search
         .debounce(500)
         .combine(_listWithFilter) { text, list ->
@@ -43,8 +50,9 @@ class ChoosingViewModel @Inject constructor(
                 list
             }
             else {
+                _choosingItem.value = null
                 list.filter {
-                    it.contains(text, true)
+                    it.name.contains(text, true)
                 }
             }
         }.stateIn(
@@ -59,6 +67,7 @@ class ChoosingViewModel @Inject constructor(
             _uiState.value = ChoosingUiState(isRoleChosen = true)
             _chosenRole.value = Constants.STUDENT
             studentEmail = checkNotNull(savedStateHandle[Constants.EMAIL])
+            getListItem(Constants.STUDENT)
         }
         else {
             studentEmail = ""
@@ -68,13 +77,8 @@ class ChoosingViewModel @Inject constructor(
     fun choosingRole(role: String) {
         _uiState.value = _uiState.value!!.copy(isRoleChosen = true)
         _chosenRole.value = role
-        _choosingIndex.value = -1
-        if (role == Constants.STUDENT) {
-            //fetchGroup
-        }
-        else {
-            //fetchTeacher
-        }
+        _choosingItem.value = null
+        getListItem(role)
     }
 
     fun deselecting() {
@@ -91,7 +95,7 @@ class ChoosingViewModel @Inject constructor(
 
 
     fun goToNextScreen() {
-        if ((_choosingIndex.value ?: -1) < 0) {
+        if (_choosingItem.value == null) {
             return
         }
         if (_uiState.value!!.isShowDialog) {
@@ -108,6 +112,13 @@ class ChoosingViewModel @Inject constructor(
             _uiState.value = _uiState.value!!.copy(mayNavigate = true)
         }
         _uiState.value = _uiState.value!!.copy(destinationString = destinationFromCase())
+        if (case != Constants.CHOOSE_SCHEDULE && case != Constants.REGISTER) {
+            putUserSettingsUseCase(UserSettings(
+                role = _chosenRole.value!!,
+                idChosenItem = _choosingItem.value!!.id,
+                nameChosenItem = _choosingItem.value!!.name
+            ))
+        }
     }
 
     fun setDefaultState() {
@@ -117,11 +128,23 @@ class ChoosingViewModel @Inject constructor(
     private fun destinationFromCase(): String {
         return when (case) {
             Constants.REGISTER -> {
-                    "${Screen.RegistrationScreen.route}/${_chosenRole.value}/123id/Даммер Д Д"
+                    "${Screen.RegistrationScreen.route}/${_chosenRole.value}/${_choosingItem.value!!.id}/${_choosingItem.value!!.name}"
             }
             Constants.CHANGE_GROUP -> Screen.ProfileScreen.route
             else -> {
-                    "${Screen.ScheduleScreen.route}/${_chosenRole.value}/123id/Даммер Д Д"
+                    "${Screen.ScheduleScreen.route}/${_chosenRole.value}/${_choosingItem.value!!.id}/${_choosingItem.value!!.name}"
+            }
+        }
+    }
+
+    private fun getListItem(role: String) {
+        viewModelScope.launch {
+            getSelectionListUseCase(role).collect { result ->
+                result.onSuccess {
+                    _listWithFilter.value = it
+                }.onFailure {
+
+                }
             }
         }
     }
