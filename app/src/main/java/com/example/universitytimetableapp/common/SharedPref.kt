@@ -32,4 +32,7 @@ class SharedPref @Inject constructor(
         editor.apply()
     }
 
+    fun clearSettings() {
+        preferences.edit().clear().apply()
+    }
 }

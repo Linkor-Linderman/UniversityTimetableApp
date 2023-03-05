@@ -1,7 +1,7 @@
 package com.example.universitytimetableapp.di
 
+import com.example.universitytimetableapp.feature_application_login.data.api.ChoiceApi
 import com.example.universitytimetableapp.feature_application_login.data.api.EntranceApi
-import com.example.universitytimetableapp.feature_application_login.data.api.ExistingGroupsTeachersApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +20,6 @@ object FeatureLoginApiModule {
 
     @Singleton
     @Provides
-    fun provideExistingGroupsTeachersApi(retrofit: Retrofit): ExistingGroupsTeachersApi =
-        retrofit.create(ExistingGroupsTeachersApi::class.java)
+    fun provideChoiceApi(retrofit: Retrofit): ChoiceApi =
+        retrofit.create(ChoiceApi::class.java)
 }

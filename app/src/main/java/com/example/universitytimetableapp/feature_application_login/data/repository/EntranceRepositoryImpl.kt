@@ -1,8 +1,6 @@
 package com.example.universitytimetableapp.feature_application_login.data.repository
 
 import android.util.Log
-import com.example.universitytimetableapp.common.Constants
-import com.example.universitytimetableapp.common.SharedPref
 import com.example.universitytimetableapp.feature_application_login.data.api.EntranceApi
 import com.example.universitytimetableapp.feature_application_login.data.dto.CredentialsDto
 import com.example.universitytimetableapp.feature_application_login.data.dto.StudentRegisterDto
@@ -11,6 +9,7 @@ import com.example.universitytimetableapp.feature_application_login.domain.model
 import com.example.universitytimetableapp.feature_application_login.domain.model.StudentRegistration
 import com.example.universitytimetableapp.feature_application_login.domain.model.TeacherRegistration
 import com.example.universitytimetableapp.feature_application_login.domain.repository.EntranceRepository
+import com.example.universitytimetableapp.feature_application_login.domain.repository.PreferencesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -19,13 +18,13 @@ import javax.inject.Inject
 
 class EntranceRepositoryImpl @Inject constructor(
     private val api: EntranceApi,
-    private val sharedPref: SharedPref
+    private val prefRepository: PreferencesRepository
 ) : EntranceRepository {
 
     override fun signIn(body: LoginCredentials): Flow<Result<Unit>> = flow {
         try {
             val token = api.signIn(CredentialsDto.fromLoginCredentials(body))
-            sharedPref.setString(Constants.TOKEN, token.token)
+            prefRepository.putToken(token.token)
             emit(Result.success(Unit))
         }
         catch (e: Exception) {
