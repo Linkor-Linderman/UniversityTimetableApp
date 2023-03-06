@@ -27,9 +27,4 @@ class PreferencesRepositoryImpl @Inject constructor(
         sharedPref.setString(Constants.ID, userSettings.idChosenItem)
         sharedPref.setString(Constants.TEACHER_GROUP_NAME, userSettings.nameChosenItem)
     }
-
-    //Убрать это потом в profile_feature
-    fun clearSettings() {
-        sharedPref.clearSettings()
-    }
 }

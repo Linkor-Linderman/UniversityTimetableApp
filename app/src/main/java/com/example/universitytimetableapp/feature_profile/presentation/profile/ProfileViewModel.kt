@@ -3,14 +3,22 @@ package com.example.universitytimetableapp.feature_profile.presentation.profile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.universitytimetableapp.common.Constants
 import com.example.universitytimetableapp.common.Screen
+import com.example.universitytimetableapp.feature_profile.domain.model.PasswordChange
+import com.example.universitytimetableapp.feature_profile.domain.use_case.ChangePasswordUseCase
+import com.example.universitytimetableapp.feature_profile.domain.use_case.ClearLocalDataUseCase
+import com.example.universitytimetableapp.feature_profile.domain.use_case.GetUserAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-
+    private val getUserAccountUseCase: GetUserAccountUseCase,
+    private val changePasswordUseCase: ChangePasswordUseCase,
+    private val clearLocalDataUseCase: ClearLocalDataUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableLiveData(ProfileUiState())
@@ -33,6 +41,10 @@ class ProfileViewModel @Inject constructor(
         correctData()
     }
 
+    init {
+        getAccount()
+    }
+
     fun showOrCloseDialog() {
         if (_uiState.value!!.isShowDialog) {
             _uiState.value = _uiState.value!!.copy(
@@ -49,8 +61,21 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun changePassword() {
-        // Проверка + запрос
-        showOrCloseDialog()
+        // Проверка
+        viewModelScope.launch {
+            changePasswordUseCase(
+                PasswordChange(
+                    oldPassword = _oldPassword.value!!,
+                    newPassword = _newPassword.value!!
+                )
+            ).collect { result ->
+                result.onSuccess {
+                    showOrCloseDialog()
+                }.onFailure {
+
+                }
+            }
+        }
     }
 
     fun goToNextScreen(case: String) {
@@ -71,7 +96,7 @@ class ProfileViewModel @Inject constructor(
                 )
             }
             Constants.EXIT -> {
-                //Обнуляем SharedPreferences
+                clearLocalDataUseCase()
                 _uiState.value = _uiState.value!!.copy(
                     destinationString = Screen.FirstScreen.route
                 )
@@ -99,5 +124,33 @@ class ProfileViewModel @Inject constructor(
 
     private fun correctData() {
         _isCorrectData.value = _oldPassword.value!!.isNotEmpty() && _newPassword.value!!.isNotEmpty()
+    }
+
+    private fun getAccount() {
+        _uiState.value = ProfileUiState(isLoading = true)
+        viewModelScope.launch {
+            getUserAccountUseCase().collect { result ->
+                result.onSuccess {
+                    if (it.role == Constants.TEACHER || it.role == Constants.STUDENT) {
+                        _uiState.value = _uiState.value!!.copy(
+                            isLoading = false,
+                            profile = it,
+                            isGuest = false,
+                            isStudent = it.role == Constants.STUDENT
+                        )
+                    }
+                    else {
+                        _uiState.value = _uiState.value!!.copy(
+                            isLoading = false,
+                            isGuest = true
+                        )
+                    }
+                }.onFailure {
+                    _uiState.value = _uiState.value!!.copy(
+                        isLoading = false
+                    )
+                }
+            }
+        }
     }
 }

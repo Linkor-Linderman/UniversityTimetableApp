@@ -119,7 +119,10 @@ fun ProfileScreen(
             viewModel.setDefaultState()
             navController.navigate(state!!.destinationString)
         }
-        if (state!!.isGuest) {
+        if (state!!.isLoading) {
+            CircularProgressIndicator(modifier = Modifier.fillMaxSize(), color = brown)
+        }
+        else if (state!!.isGuest) {
             GuestProfile(padding = padding, viewModel)
         }
         else {

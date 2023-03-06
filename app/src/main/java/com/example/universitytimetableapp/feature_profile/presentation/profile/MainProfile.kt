@@ -44,7 +44,7 @@ fun MainProfile(
                 Box(modifier = Modifier.fillMaxWidth(0.25f)) {
                     ProfileLeftText(name = stringResource(R.string.surname))
                 }
-                ProfileRightText(name = "Феофилов")
+                ProfileRightText(name = uiState!!.profile?.surname ?: "")
             }
             Row(
                 modifier = Modifier
@@ -56,7 +56,7 @@ fun MainProfile(
                 Box(modifier = Modifier.fillMaxWidth(0.25f)) {
                     ProfileLeftText(name = stringResource(R.string.name))
                 }
-                ProfileRightText(name = "Алексей")
+                ProfileRightText(name = uiState!!.profile?.name ?: "")
             }
             Row(
                 modifier = Modifier
@@ -68,7 +68,7 @@ fun MainProfile(
                 Box(modifier = Modifier.fillMaxWidth(0.25f)) {
                     ProfileLeftText(name = stringResource(R.string.patronymic))
                 }
-                ProfileRightText(name = "Дмитриевич")
+                ProfileRightText(name = uiState!!.profile?.patronymic ?: "")
             }
             Row(
                 modifier = Modifier
@@ -80,7 +80,7 @@ fun MainProfile(
                 Box(modifier = Modifier.fillMaxWidth(0.25f)) {
                     ProfileLeftText(name = stringResource(R.string.email))
                 }
-                ProfileRightText(name = "fil_master@gmail.com")
+                ProfileRightText(name = uiState!!.profile?.email ?: "")
             }
             if (uiState!!.isStudent) {
                 Row(
@@ -93,7 +93,7 @@ fun MainProfile(
                     Box(modifier = Modifier.fillMaxWidth(0.25f)) {
                         ProfileLeftText(name = stringResource(R.string.group))
                     }
-                    ProfileRightText(name = "972101")
+                    ProfileRightText(name = uiState!!.profile?.groupNumber ?: "")
                 }
             }
         }
