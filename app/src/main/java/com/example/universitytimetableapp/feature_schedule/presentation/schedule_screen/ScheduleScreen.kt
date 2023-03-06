@@ -4,8 +4,10 @@ package com.example.universitytimetableapp.feature_schedule.presentation.schedul
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.composable.TimeTableForWeek
@@ -20,19 +22,20 @@ import com.example.universitytimetableapp.R
 @Composable
 fun ScheduleScreen(
     navController: NavController,
-    viewModel: ScheduleScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: ScheduleScreenViewModel = hiltViewModel(),
 ) {
     val systemUiController = rememberSystemUiController()
     val state = viewModel.state.value
+    val groupWord = stringResource(id = R.string.group)
+
     systemUiController.setSystemBarsColor(
         color = brown
     )
-    val groupWord = stringResource(id = R.string.group)
 
     Scaffold(
         topBar = {
             TopBarForScheduleScreen(
-                text = "$groupWord 972101",
+                text = if (state.type =="STUDENT") "$groupWord ${state.name}" else state.name,
                 month = state.monthOfCurrentWeek,
                 year = state.yearOfCurrentWeek
             )

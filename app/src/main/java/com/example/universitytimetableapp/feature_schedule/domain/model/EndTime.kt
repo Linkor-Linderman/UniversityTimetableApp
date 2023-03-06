@@ -5,4 +5,8 @@ data class EndTime(
     val minute: Int,
     val nano: Int,
     val second: Int
-)
+) {
+    fun getHourAndMinute(): String {
+        return "$hour:$minute"
+    }
+}

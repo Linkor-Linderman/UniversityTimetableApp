@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -103,11 +104,11 @@ fun TimeTableForWeek(
                     Animatable(Color.Transparent)
                 }
                 LaunchedEffect(
-                    pagerState.currentPage == index  && !pagerState.isScrollInProgress,
+                    pagerState.currentPage == index && !pagerState.isScrollInProgress,
                     pagerState.isScrollInProgress && pagerState.targetPage == index
                 ) {
                     color.animateTo(
-                        if (pagerState.currentPage == index && !pagerState.isScrollInProgress  || pagerState.isScrollInProgress && pagerState.targetPage == index)
+                        if (pagerState.currentPage == index && !pagerState.isScrollInProgress || pagerState.isScrollInProgress && pagerState.targetPage == index)
                             greyForSelectedDay
                         else
                             Color.Transparent,
@@ -192,14 +193,40 @@ fun TimeTableForWeek(
         HorizontalPager(
             state = pagerState,
         ) { index ->
-            TimetablePageForDay(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 18.dp, vertical = 20.dp),
-                onClickToClassCard = {
-                    navController.navigate(Screen.DetailClassInformationScreen.route)
+            if (state.scheduleItemsForWeek.isNotEmpty()) {
+                TimetablePageForDay(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 18.dp, vertical = 20.dp),
+                    navController = navController,
+                    scheduleItemsForDay = state.scheduleItemsForWeek[index]
+                )
+            } else if (state.errorMessage.isNotBlank()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Center
+                ) {
+                    Text(
+                        text = state.errorMessage,
+                        color = MaterialTheme.colors.error,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                            .align(Center)
+                    )
                 }
-            )
+            } else if (state.isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Center),
+                        color = brown
+                    )
+                }
+            }
         }
     }
 }

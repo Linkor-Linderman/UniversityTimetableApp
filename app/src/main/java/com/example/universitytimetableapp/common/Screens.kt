@@ -10,4 +10,13 @@ sealed class Screen(val route: String) {
     object ProfileScreen : Screen("profile_screen")
     object DetailClassInformationScreen : Screen("detail_class_information_screen")
     object ScheduleScreen : Screen("schedule_screen")
+
+    fun withArg(vararg args: String): String{
+        return buildString {
+            append(route)
+            args.forEach { arg ->
+                append("/$arg")
+            }
+        }
+    }
 }

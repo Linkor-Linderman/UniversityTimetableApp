@@ -19,7 +19,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @Composable
 fun DetailClassInformationScreen(
     navController: NavController,
-    viewModel: DetailClassInformationViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: DetailClassInformationViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
 ) {
     val systemUiController = rememberSystemUiController()
 
@@ -30,9 +30,6 @@ fun DetailClassInformationScreen(
     val state = viewModel.state.value
     val coupleWord = stringResource(id = R.string.couple)
 
-    LaunchedEffect(key1 = true){
-        viewModel.getCurrentClassInformation()
-    }
     Scaffold(
         topBar = {
             TopBarForDetailClassInformationScreen(

@@ -19,7 +19,7 @@ import com.example.universitytimetableapp.ui.theme.Jura
 @Composable
 fun WindowCard(
     timeInterval: String = "Something",
-    numberOfClassInThisWindow: Int = 0
+    numberOfClassInThisWindow: String = ""
 ) {
     Box(
         modifier = Modifier
@@ -51,7 +51,7 @@ fun WindowCard(
 
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = numberOfClassInThisWindow.toString(),
+                text = numberOfClassInThisWindow + "пары",
                 fontFamily = Jura,
                 color = Color.Black,
                 fontSize = 15.sp

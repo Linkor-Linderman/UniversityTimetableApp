@@ -2,8 +2,10 @@ package com.example.universitytimetableapp.common
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.universitytimetableapp.feature_application_login.presentation.choice.ChoosingScreen
 import com.example.universitytimetableapp.feature_application_login.presentation.first.FirstScreen
 import com.example.universitytimetableapp.feature_application_login.presentation.login.LoginScreen
@@ -52,7 +54,16 @@ fun NavigationGraph(
             ScheduleScreen(navController)
         }
         composable(
-            route = Screen.DetailClassInformationScreen.route
+            route = Screen.DetailClassInformationScreen.route + "/{className}/{classTime}/{classNumber}/{teacherName}/{classType}/{location}/{groupNumber}",
+            arguments = listOf(
+                navArgument("className") { NavType.StringType },
+                navArgument("classTime") { NavType.StringType },
+                navArgument("classNumber") { NavType.IntType },
+                navArgument("teacherName") { NavType.StringType },
+                navArgument("classType") { NavType.StringType },
+                navArgument("location") { NavType.StringType },
+                navArgument("groupNumber") { NavType.IntType },
+            )
         ) {
             DetailClassInformationScreen(navController)
         }
