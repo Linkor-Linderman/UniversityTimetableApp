@@ -34,9 +34,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        freeCompilerArgs += [
-                '-Xjvm-default=enable'
-        ]
     }
     buildFeatures {
         compose true
@@ -101,6 +98,9 @@ dependencies {
 
     //Flow layout
     implementation "com.google.accompanist:accompanist-flowlayout:0.27.0"
+
+    //Joda-Time
+    implementation 'net.danlew:android.joda:2.12.1.1'
 
     //SharedPreferences
     implementation "androidx.security:security-crypto:1.0.0"

@@ -1,4 +1,4 @@
-package com.example.universitytimetableapp.feature_schedule.presentation.composable
+package com.example.universitytimetableapp.feature_schedule.presentation.common_composable
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size

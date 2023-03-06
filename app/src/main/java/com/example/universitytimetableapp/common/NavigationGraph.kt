@@ -11,8 +11,8 @@ import com.example.universitytimetableapp.feature_application_login.presentation
 import com.example.universitytimetableapp.feature_application_login.presentation.login.LoginScreen
 import com.example.universitytimetableapp.feature_application_login.presentation.registration.RegistrationScreen
 import com.example.universitytimetableapp.feature_profile.presentation.profile.ProfileScreen
-import com.example.universitytimetableapp.feature_schedule.presentation.DetailClassInformationScreen
-import com.example.universitytimetableapp.feature_schedule.presentation.ScheduleScreen
+import com.example.universitytimetableapp.feature_schedule.presentation.detail_class_information_screen.DetailClassInformationScreen
+import com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.ScheduleScreen
 
 @Composable
 fun NavigationGraph(
@@ -68,7 +68,16 @@ fun NavigationGraph(
             ScheduleScreen(navController)
         }
         composable(
-            route = Screen.DetailClassInformationScreen.route
+            route = Screen.DetailClassInformationScreen.route + "/{className}/{classTime}/{classNumber}/{teacherName}/{classType}/{location}/{groupNumber}",
+            arguments = listOf(
+                navArgument("className") { NavType.StringType },
+                navArgument("classTime") { NavType.StringType },
+                navArgument("classNumber") { NavType.IntType },
+                navArgument("teacherName") { NavType.StringType },
+                navArgument("classType") { NavType.StringType },
+                navArgument("location") { NavType.StringType },
+                navArgument("groupNumber") { NavType.IntType },
+            )
         ) {
             DetailClassInformationScreen(navController)
         }

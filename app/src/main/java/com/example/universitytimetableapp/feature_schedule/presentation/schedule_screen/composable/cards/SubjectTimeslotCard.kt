@@ -1,5 +1,6 @@
-package com.example.universitytimetableapp.feature_schedule.presentation.composable.cards
+package com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.composable.cards
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -8,20 +9,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.universitytimetableapp.R
-import com.example.universitytimetableapp.feature_schedule.presentation.composable.RowWithTextAndIcon
+import com.example.universitytimetableapp.feature_schedule.domain.model.Lesson
+import com.example.universitytimetableapp.feature_schedule.presentation.common_composable.RowWithTextAndIcon
 import com.example.universitytimetableapp.ui.theme.Jura
 
-@Preview
 @Composable
-fun SubjectTimeslotCard() {
+fun SubjectTimeslotCard(
+    onClick: () -> Unit,
+    lesson: Lesson
+) {
+    val coupleWord = stringResource(id = R.string.couple)
     Card(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+                onClick()
+            },
         backgroundColor = Color.LightGray,
         elevation = 0.dp,
         shape = RoundedCornerShape(10.dp),
@@ -32,7 +41,7 @@ fun SubjectTimeslotCard() {
                 .padding(horizontal = 12.dp, vertical = 12.dp)
         ) {
             Text(
-                text = "Математический анализ",
+                text = lesson.subject.name,
                 fontSize = 18.sp,
                 color = Color.Black,
                 fontFamily = Jura,
@@ -40,28 +49,28 @@ fun SubjectTimeslotCard() {
             )
             Spacer(modifier = Modifier.height(11.dp))
             RowWithTextAndIcon(
-                text = "Лекция",
+                text = lesson.lessonType.name,
                 painter = painterResource(
                     id = R.drawable.class_type_icon,
                 )
             )
             Spacer(modifier = Modifier.height(7.dp))
             RowWithTextAndIcon(
-                text = "Диана Даммировна",
+                text = "${lesson.teacher.lastName} ${lesson.teacher.firstName} ${lesson.teacher.patronymicName}",
                 painter = painterResource(
                     id = R.drawable.teacher_icon,
                 )
             )
             Spacer(modifier = Modifier.height(7.dp))
             RowWithTextAndIcon(
-                text = "332 (2) Учебная аудитория",
+                text = "${lesson.studyRoom.number} (${lesson.studyRoom.floor}) ${lesson.studyRoom.name}",
                 painter = painterResource(
                     id = R.drawable.place_of_the_lesson_icon,
                 )
             )
             Spacer(modifier = Modifier.height(7.dp))
             RowWithTextAndIcon(
-                text = "972101",
+                text = lesson.groups.map { it.number }.toString(),
                 painter = painterResource(
                     id = R.drawable.group_icon,
                 )
@@ -72,13 +81,13 @@ fun SubjectTimeslotCard() {
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = "4 пара",
+                    text = "${lesson.lessonTime.lessonNumber} $coupleWord",
                     fontSize = 10.sp,
                     fontFamily = Jura,
                     color = Color.Black
                 )
                 Text(
-                    text = "14:45 - 16:20",
+                    text = lesson.lessonTime.getTimePeriod(),
                     fontSize = 15.sp,
                     fontFamily = Jura,
                     color = Color.Black,

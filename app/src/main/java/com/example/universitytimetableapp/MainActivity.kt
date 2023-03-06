@@ -9,6 +9,7 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.universitytimetableapp.common.NavigationGraph
+import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.ui.theme.UniversityTimetableAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +24,10 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val navController = rememberNavController()
-                    NavigationGraph(navController = navController)
+                    NavigationGraph(
+                        navController = navController,
+                        startDestination = Screen.ScheduleScreen.route
+                    )
                 }
             }
         }
