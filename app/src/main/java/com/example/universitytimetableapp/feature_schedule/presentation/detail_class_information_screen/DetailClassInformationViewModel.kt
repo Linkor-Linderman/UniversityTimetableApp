@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.example.universitytimetableapp.common.Constants
 
 class DetailClassInformationViewModel(
     savedStateHandle: SavedStateHandle
@@ -11,23 +12,23 @@ class DetailClassInformationViewModel(
 
     private val className: String
     private val classTime: String
-    private val classNumber: Int
+    private val classNumber: String
     private val teacherName: String
     private val classType: String
     private val location: String
-    private val groupNumber: Int
+    private val groupNumber: String
 
     private val _state = mutableStateOf(DetailClassInformationScreenState())
     val state: State<DetailClassInformationScreenState> = _state
 
     init {
-        className = checkNotNull(savedStateHandle["className"])
-        classTime = checkNotNull(savedStateHandle["classTime"])
-        classNumber = checkNotNull(savedStateHandle["classNumber"])
-        teacherName = checkNotNull(savedStateHandle["teacherName"])
-        classType = checkNotNull(savedStateHandle["classType"])
-        location = checkNotNull(savedStateHandle["location"])
-        groupNumber = checkNotNull(savedStateHandle["groupNumber"])
+        className = checkNotNull(savedStateHandle[Constants.CLASS_NAME])
+        classTime = checkNotNull(savedStateHandle[Constants.CLASS_TIME])
+        classNumber = checkNotNull(savedStateHandle[Constants.CLASS_NUMBER])
+        teacherName = checkNotNull(savedStateHandle[Constants.TEACHER_NAME])
+        classType = checkNotNull(savedStateHandle[Constants.CLASS_TYPE])
+        location = checkNotNull(savedStateHandle[Constants.LOCATION])
+        groupNumber = checkNotNull(savedStateHandle[Constants.GROUP_NUMBER])
 
         getCurrentClassInformation(
             className,
@@ -40,14 +41,14 @@ class DetailClassInformationViewModel(
         )
     }
 
-    fun getCurrentClassInformation(
+    private fun getCurrentClassInformation(
         className: String = "",
         classTime: String = "",
-        classNumber: Int = 0,
+        classNumber: String = "",
         teacherName: String = "",
         classType: String = "",
         location: String = "",
-        groupNumber: Int = 0
+        groupNumber: String = ""
     ) {
         _state.value = _state.value.copy(
             className = className,

@@ -11,9 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.ui.theme.Jura
 
 
@@ -21,6 +23,7 @@ import com.example.universitytimetableapp.ui.theme.Jura
 fun BreakCard(
     text: String = "Something"
 ) {
+    val wordForMinutes = stringResource(id = R.string.minutes)
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -35,7 +38,7 @@ fun BreakCard(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = text,
+                text = "$text $wordForMinutes",
                 fontFamily = Jura,
                 fontWeight = FontWeight.Light,
                 color = Color.Black,

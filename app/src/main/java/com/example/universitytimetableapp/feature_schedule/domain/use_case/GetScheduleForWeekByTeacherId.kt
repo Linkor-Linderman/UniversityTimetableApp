@@ -1,5 +1,6 @@
 package com.example.universitytimetableapp.feature_schedule.domain.use_case
 
+import android.util.Log
 import com.example.universitytimetableapp.common.Resource
 import com.example.universitytimetableapp.feature_schedule.domain.model.ScheduleItem
 import com.example.universitytimetableapp.feature_schedule.domain.model.ScheduleItemsForDay
@@ -29,7 +30,7 @@ class GetScheduleForWeekByTeacherId @Inject constructor(
                 val listOfScheduleItemForWeek = mutableListOf<ScheduleItemsForDay>()
 
                 for (scheduleForDay in listOfScheduleForDay) {
-                    val previousLessonNumber = 0
+                    var previousLessonNumber = 0
                     val listOfScheduleItemCard = mutableListOf<ScheduleItem>()
                     for (lessonIndex in 0..scheduleForDay.lessons.size - 2) {
                         val lessonNumberForCurrentLesson =
@@ -45,22 +46,40 @@ class GetScheduleForWeekByTeacherId @Inject constructor(
                                     endTime = listOfLessonTime[lessonNumberForCurrentLesson - 1].endTime
                                 )
                             )
-                        } else {
-                            listOfScheduleItemCard.add(
-                                ScheduleItem.SubjectItem(
-                                    lesson = scheduleForDay.lessons[lessonIndex]
-                                )
-                            )
                         }
-
-                        if (lessonNumberForCurrentLesson - lessonNumberForNextLesson == 1) {
+                        listOfScheduleItemCard.add(
+                            ScheduleItem.SubjectItem(
+                                lesson = scheduleForDay.lessons[lessonIndex]
+                            )
+                        )
+                        Log.i(
+                            "lessonNumberForCurrentLesson",
+                            lessonNumberForCurrentLesson.toString()
+                        )
+                        Log.i("lessonNumberForNextLesson", lessonNumberForNextLesson.toString())
+                        Log.i(
+                            "difference",
+                            (lessonNumberForNextLesson - lessonNumberForCurrentLesson).toString()
+                        )
+                        if (lessonNumberForNextLesson - lessonNumberForCurrentLesson == 1) {
                             listOfScheduleItemCard.add(
                                 ScheduleItem.BreakItem(
                                     startTime = scheduleForDay.lessons[lessonIndex].lessonTime.endTime,
                                     endTime = scheduleForDay.lessons[lessonIndex + 1].lessonTime.startTime
                                 )
                             )
+                            if (lessonIndex == scheduleForDay.lessons.size - 2 && lessonNumberForNextLesson - lessonNumberForCurrentLesson == 1) {
+                                listOfScheduleItemCard.add(
+                                    ScheduleItem.SubjectItem(
+                                        lesson = scheduleForDay.lessons[lessonIndex + 1]
+                                    )
+                                )
+                            }
                         }
+
+
+
+                        previousLessonNumber = lessonNumberForCurrentLesson + 1
                     }
                     listOfScheduleItemForWeek.add(
                         ScheduleItemsForDay(

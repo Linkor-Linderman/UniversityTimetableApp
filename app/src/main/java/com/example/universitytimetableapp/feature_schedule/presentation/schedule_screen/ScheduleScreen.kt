@@ -17,6 +17,7 @@ import com.example.universitytimetableapp.ui.theme.brown
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.example.universitytimetableapp.R
+import com.example.universitytimetableapp.common.Constants
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -35,7 +36,7 @@ fun ScheduleScreen(
     Scaffold(
         topBar = {
             TopBarForScheduleScreen(
-                text = if (state.type =="STUDENT") "$groupWord ${state.name}" else state.name,
+                text = if (state.type == Constants.STUDENT) "$groupWord ${state.name}" else state.name,
                 month = state.monthOfCurrentWeek,
                 year = state.yearOfCurrentWeek
             )

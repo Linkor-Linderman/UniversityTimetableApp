@@ -70,7 +70,11 @@ fun SubjectTimeslotCard(
             )
             Spacer(modifier = Modifier.height(7.dp))
             RowWithTextAndIcon(
-                text = lesson.groups.map { it.number }.toString(),
+                text = buildString {
+                    lesson.groups.forEach {
+                        append(it.number + ", ")
+                    }
+                }.dropLast(2),
                 painter = painterResource(
                     id = R.drawable.group_icon,
                 )

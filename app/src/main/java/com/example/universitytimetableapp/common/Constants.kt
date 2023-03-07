@@ -17,4 +17,13 @@ object Constants {
     const val BASE_URL = "http://81.177.196.180:48656/"
     const val PREFERENCE_NAME = "shared"
     const val TOKEN = "token"
+
+    const val CLASS_NAME = "className"
+    const val CLASS_TIME = "classTime"
+    const val CLASS_NUMBER = "classNumber"
+    const val TEACHER_NAME = "teacherName"
+    const val CLASS_TYPE = "classType"
+    const val LOCATION = "location"
+    const val GROUP_NUMBER = "groupNumber"
+
 }
