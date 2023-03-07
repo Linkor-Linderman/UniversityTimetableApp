@@ -1,6 +1,7 @@
 package com.example.universitytimetableapp.feature_schedule.di
 
 import com.example.universitytimetableapp.feature_schedule.data.remote.ScheduleApiService
+import com.example.universitytimetableapp.feature_schedule.data.repository.RepositoryForTest
 import com.example.universitytimetableapp.feature_schedule.data.repository.ScheduleFeatureRepositoryImpl
 import com.example.universitytimetableapp.feature_schedule.domain.repository.ScheduleFeatureRepository
 import com.example.universitytimetableapp.feature_schedule.domain.use_case.*
@@ -32,7 +33,7 @@ object ScheduleFeatureModule {
     fun provideScheduleFeatureRepository(
         api: ScheduleApiService
     ): ScheduleFeatureRepository {
-        return ScheduleFeatureRepositoryImpl(
+        return RepositoryForTest(
             api = api
         )
     }

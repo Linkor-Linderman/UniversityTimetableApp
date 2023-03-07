@@ -68,15 +68,17 @@ fun NavigationGraph(
             ScheduleScreen(navController)
         }
         composable(
-            route = Screen.DetailClassInformationScreen.route + "/{className}/{classTime}/{classNumber}/{teacherName}/{classType}/{location}/{groupNumber}",
+            route = Screen.DetailClassInformationScreen.route +
+                    "/{${Constants.CLASS_NAME}}/{${Constants.CLASS_TIME}}/{${Constants.CLASS_NUMBER}}" +
+                    "/{${Constants.TEACHER_NAME}}/{${Constants.CLASS_TYPE}}/{${Constants.LOCATION}}/{${Constants.GROUP_NUMBER}}",
             arguments = listOf(
-                navArgument("className") { NavType.StringType },
-                navArgument("classTime") { NavType.StringType },
-                navArgument("classNumber") { NavType.IntType },
-                navArgument("teacherName") { NavType.StringType },
-                navArgument("classType") { NavType.StringType },
-                navArgument("location") { NavType.StringType },
-                navArgument("groupNumber") { NavType.IntType },
+                navArgument(Constants.CLASS_NAME) { NavType.StringType },
+                navArgument(Constants.CLASS_TIME) { NavType.StringType },
+                navArgument(Constants.CLASS_NUMBER) { NavType.IntType },
+                navArgument(Constants.TEACHER_NAME) { NavType.StringType },
+                navArgument(Constants.CLASS_TYPE) { NavType.StringType },
+                navArgument(Constants.LOCATION) { NavType.StringType },
+                navArgument(Constants.GROUP_NUMBER) { NavType.IntType },
             )
         ) {
             DetailClassInformationScreen(navController)

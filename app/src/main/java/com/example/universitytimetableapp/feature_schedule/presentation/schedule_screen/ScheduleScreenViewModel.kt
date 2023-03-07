@@ -5,9 +5,13 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.universitytimetableapp.common.Constants
 import com.example.universitytimetableapp.common.Resource
+import com.example.universitytimetableapp.feature_schedule.domain.model.ScheduleItemsForDay
 import com.example.universitytimetableapp.feature_schedule.domain.use_case.UseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
@@ -28,9 +32,9 @@ class ScheduleScreenViewModel @Inject constructor(
     val state: State<ScheduleScreenState> = _state
 
     init {
-        type = checkNotNull(savedStateHandle["typeUser"])
-        id = checkNotNull(savedStateHandle["id"])
-        name = checkNotNull(savedStateHandle["teacherName"])
+        type = checkNotNull(savedStateHandle[Constants.TYPE_USER])
+        id = checkNotNull(savedStateHandle[Constants.ID])
+        name = checkNotNull(savedStateHandle[Constants.TEACHER_GROUP_NAME])
 
         getCurrentDaysOfMonthForWeek()
 
@@ -54,49 +58,59 @@ class ScheduleScreenViewModel @Inject constructor(
         name: String
     ) {
         val fmt: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-        val startDate = fmt.parseDateTime(_state.value.currentDaysNumber[0].toString())
+        val startDate =
+            fmt.parseDateTime(_state.value.currentDaysNumber[0].toLocalDate().toString()).toString()
+                .substring(0, 10)
+        Log.i("START DATE", startDate)
         val endDate =
-            fmt.parseDateTime(_state.value.currentDaysNumber[_state.value.currentDaysNumber.size - 1].toString())
+            fmt.parseDateTime(
+                _state.value.currentDaysNumber[_state.value.currentDaysNumber.size - 1].toLocalDate()
+                    .toString()
+            ).toString().substring(0, 10)
+        Log.i("END DATE", endDate)
         when (type) {
-            "STUDENT" -> {
+            Constants.STUDENT -> {
                 useCases.getScheduleForWeekByGroupId(
                     id = id,
-                    startDate = startDate.toString(),
-                    endDate = endDate.toString()
+                    startDate = startDate,
+                    endDate = endDate
                 ).onEach { result ->
                     when (result) {
-                        is Resource.Success -> {
+                        is Resource.Success<List<ScheduleItemsForDay>> -> {
                             _state.value = _state.value.copy(
                                 scheduleItemsForWeek = result.data ?: emptyList(),
-                                type = "STUDENT",
+                                type = Constants.STUDENT,
                                 id = id,
                                 name = name
                             )
+                            Log.i("NAME", _state.value.name)
                         }
-                        is Resource.Error -> {
+                        is Resource.Error<List<ScheduleItemsForDay>> -> {
                             _state.value = _state.value.copy(
                                 errorMessage = result.message ?: "An unexpected error occured"
                             )
+                            Log.i("errorMessage", _state.value.errorMessage)
                         }
-                        is Resource.Loading -> {
+                        is Resource.Loading<List<ScheduleItemsForDay>> -> {
                             _state.value = _state.value.copy(
                                 isLoading = true
                             )
+                            Log.i("loading", _state.value.isLoading.toString())
                         }
                     }
-                }
+                }.launchIn(viewModelScope)
             }
-            "TEACHER" -> {
+            Constants.TEACHER -> {
                 useCases.getScheduleForWeekByTeacherId(
                     id = id,
-                    startDate = startDate.toString(),
-                    endDate = endDate.toString()
+                    startDate = startDate,
+                    endDate = endDate
                 ).onEach { result ->
                     when (result) {
                         is Resource.Success -> {
                             _state.value = _state.value.copy(
                                 scheduleItemsForWeek = result.data ?: emptyList(),
-                                type = "TEACHER",
+                                type = Constants.TEACHER,
                                 id = id,
                                 name = name
                             )
@@ -112,7 +126,7 @@ class ScheduleScreenViewModel @Inject constructor(
                             )
                         }
                     }
-                }
+                }.launchIn(viewModelScope)
             }
         }
     }
@@ -135,6 +149,11 @@ class ScheduleScreenViewModel @Inject constructor(
                     yearOfCurrentWeek = mondayOfNextWeek.year.toString(),
                     currentDaysNumber = useCases.getDayNumbersOfAWeek(mondayOfNextWeek),
                 )
+                getScheduleForWeek(
+                    id = _state.value.id,
+                    type = _state.value.type,
+                    name = _state.value.name
+                )
                 Log.i("MONDAY OF NEXT WEEK", _state.value.currentDay.toString())
             }
             is ScheduleScreenEvent.ChangeToPreviousWeek -> {
@@ -145,6 +164,11 @@ class ScheduleScreenViewModel @Inject constructor(
                     monthOfCurrentWeek = mondayOfPreviousWeek.monthOfYear - 1,
                     yearOfCurrentWeek = mondayOfPreviousWeek.year.toString(),
                     currentDaysNumber = useCases.getDayNumbersOfAWeek(mondayOfPreviousWeek)
+                )
+                getScheduleForWeek(
+                    id = _state.value.id,
+                    type = _state.value.type,
+                    name = _state.value.name
                 )
                 Log.i("MONDAY OF PREVIOUS WEEK", _state.value.currentDay.toString())
             }

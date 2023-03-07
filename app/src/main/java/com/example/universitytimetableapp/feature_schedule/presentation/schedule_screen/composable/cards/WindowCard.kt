@@ -51,7 +51,7 @@ fun WindowCard(
 
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = numberOfClassInThisWindow + "пары",
+                text = "Количество пар: $numberOfClassInThisWindow",
                 fontFamily = Jura,
                 color = Color.Black,
                 fontSize = 15.sp
