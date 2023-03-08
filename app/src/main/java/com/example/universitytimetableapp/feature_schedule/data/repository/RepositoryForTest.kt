@@ -87,10 +87,10 @@ class RepositoryForTest(
                     id = i.toString(),
                     lessonTime = LessonTime(
                         endTime = EndTime(
-                            10, 20, 0, 0
+                            i+1, 20, 0, 0
                         ),
                         startTime = StartTime(
-                            10, 10, 0, 0
+                            i, 10, 0, 0
                         ),
                         lessonNumber = i
                     ),
@@ -111,7 +111,7 @@ class RepositoryForTest(
                 )
             )
         }
-        for (i in 6..8) {
+        for (i in 5..8) {
             listOfLessons.add(
                 Lesson(
                     dayOfWeek = i.toString(),
@@ -126,10 +126,10 @@ class RepositoryForTest(
                     id = i.toString(),
                     lessonTime = LessonTime(
                         endTime = EndTime(
-                            10, 20, 0, 0
+                            i + 1, 35, 0, 0
                         ),
                         startTime = StartTime(
-                            10, 10, 0, 0
+                            i, 20, 0, 0
                         ),
                         lessonNumber = i
                     ),

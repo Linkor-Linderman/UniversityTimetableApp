@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,14 +19,15 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
-import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.ScheduleScreenEvent
 import com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.ScheduleScreenState
+import com.example.universitytimetableapp.ui.theme.Jura
 import com.example.universitytimetableapp.ui.theme.Zekton
 import com.example.universitytimetableapp.ui.theme.brown
 import com.example.universitytimetableapp.ui.theme.greyForSelectedDay
@@ -190,10 +194,10 @@ fun TimeTableForWeek(
             }
         }
 
-        HorizontalPager(
-            state = pagerState,
-        ) { index ->
-            if (state.scheduleItemsForWeek.isNotEmpty()) {
+        if (state.scheduleItemsForWeek.isNotEmpty()) {
+            HorizontalPager(
+                state = pagerState,
+            ) { index ->
                 TimetablePageForDay(
                     modifier = Modifier
                         .fillMaxSize()
@@ -201,31 +205,44 @@ fun TimeTableForWeek(
                     navController = navController,
                     scheduleItemsForDay = state.scheduleItemsForWeek[index]
                 )
-            } else if (state.errorMessage.isNotBlank()) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Center
+            }
+        } else if (state.errorMessage.isNotBlank()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Icon(
+                        imageVector = Icons.Default.Warning,
+                        contentDescription = "Warning icon",
+                        modifier = Modifier.size(50.dp),
+                        tint = Color.LightGray
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = state.errorMessage,
-                        color = MaterialTheme.colors.error,
+                        color = Color.LightGray,
+                        fontSize = 20.sp,
                         textAlign = TextAlign.Center,
+                        fontFamily = Jura,
+                        fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 20.dp)
-                            .align(Center)
                     )
                 }
-            } else if (state.isLoading) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Center
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Center),
-                        color = brown
-                    )
-                }
+            }
+        } else if (state.isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Center
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Center).size(50.dp),
+                    color = brown
+                )
             }
         }
     }

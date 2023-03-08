@@ -68,6 +68,13 @@ class ScheduleScreenViewModel @Inject constructor(
                     .toString()
             ).toString().substring(0, 10)
         Log.i("END DATE", endDate)
+
+        _state.value = _state.value.copy(
+            type = Constants.STUDENT,
+            id = id,
+            name = name
+        )
+
         when (type) {
             Constants.STUDENT -> {
                 useCases.getScheduleForWeekByGroupId(
