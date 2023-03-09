@@ -11,5 +11,6 @@ data class ProfileUiState(
     val isStudent: Boolean = true,
     val isShowDialog: Boolean = false,
     val mayNavigate: Boolean = false,
-    val destinationString: String = ""
+    val destinationString: String = "",
+    val isExit: Boolean = false
 )

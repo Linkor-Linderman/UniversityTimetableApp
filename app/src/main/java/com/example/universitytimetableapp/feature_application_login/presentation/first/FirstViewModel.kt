@@ -17,19 +17,31 @@ class FirstViewModel @Inject constructor(
     val uiState: LiveData<FirstUiState> = _uiState
 
     init {
+        _uiState.value = FirstUiState(
+            isLoading = true
+        )
         val userSettings = getUserSettingsUseCase()
         userSettings.let {
             val isAlreadyInitUser = it.role.isNotEmpty() && it.idChosenItem.isNotEmpty() &&
                     it.nameChosenItem.isNotEmpty()
-            if (isAlreadyInitUser)
-                _uiState.value = FirstUiState(
-                    true,
-                    "${Screen.ScheduleScreen.route}/${it.role}/${it.idChosenItem}/${it.nameChosenItem}"
+            if (isAlreadyInitUser) {
+                _uiState.value = _uiState.value!!.copy(
+                    mayGoSchedule = true,
+                    destinationString = "${Screen.ScheduleScreen.route}/${it.role}/${it.idChosenItem}/${it.nameChosenItem}"
                 )
+            }
+            else {
+                _uiState.value = _uiState.value!!.copy(
+                    isLoading = false
+                )
+            }
         }
     }
 
     fun setDefaultState() {
-        _uiState.value = _uiState.value!!.copy(mayGoSchedule = false)
+        _uiState.value = _uiState.value!!.copy(
+            isLoading = false,
+            mayGoSchedule = false
+        )
     }
 }

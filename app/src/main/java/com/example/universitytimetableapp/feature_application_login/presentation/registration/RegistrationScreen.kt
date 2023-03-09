@@ -34,7 +34,11 @@ fun RegistrationScreen(
     val state by viewModel.uiState.observeAsState()
     if (state!!.mayNavigate) {
         viewModel.setDefaultState()
-        navController.navigate(state!!.destinationString)
+        navController.navigate(state!!.destinationString) {
+            popUpTo(Screen.FirstScreen.route) {
+                inclusive = true
+            }
+        }
     }
 
     Box(

@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.common.Constants
 import com.example.universitytimetableapp.common.Screen
+import com.example.universitytimetableapp.feature_application_login.presentation.AppProgressIndicator
 import com.example.universitytimetableapp.ui.theme.Jura
 import com.example.universitytimetableapp.ui.theme.Zekton
 import com.example.universitytimetableapp.ui.theme.brown
@@ -38,7 +39,15 @@ fun FirstScreen(
     val uiState by viewModel.uiState.observeAsState()
     if (uiState?.mayGoSchedule == true) {
         viewModel.setDefaultState()
-        navController.navigate(uiState!!.destinationString)
+        navController.navigate(uiState!!.destinationString) {
+            popUpTo(Screen.FirstScreen.route) {
+                inclusive = true
+            }
+        }
+    }
+    if (uiState!!.isLoading) {
+        AppProgressIndicator(brown)
+        return
     }
     Box(
         modifier = Modifier

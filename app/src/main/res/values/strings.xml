@@ -19,6 +19,7 @@
     <string name="choosing_group">Выберите группу</string>
     <string name="what_your_name">Как Вас зовут?</string>
     <string name="choosing_teacher">Выберите преподавателя</string>
+    <string name="choosing_classroom">Выберите аудиторию</string>
     <string name="group_number">Номер группы</string>
     <string name="full_name">ФИО</string>
     <string name="confirm">Подтвердить</string>
@@ -41,7 +42,7 @@
     <string name="exit">Выйти</string>
     <string name="change_group">Изменить группу</string>
     <string name="change_password">Изменить пароль</string>
-    <string name="watch_another_schedule">Посмотреть расписание\nгруппы / преподавателя</string>
+    <string name="watch_another_schedule">Посмотреть другое\nрасписание</string>
     <string name="not_enter_in_account">Вы ещё не вошли в аккаунт</string>
     <string name="entrance">Вход</string>
     <string name="registration">Pегистрация</string>
@@ -50,6 +51,7 @@
     <string name="old_password">Старый пароль</string>
     <string name="new_password">Новый пароль</string>
     <string name="changing">Сменить</string>
+    <string name="classroom">Аудитория</string>
 
     <string name="January">Январь</string>
     <string name="February">Февраль</string>

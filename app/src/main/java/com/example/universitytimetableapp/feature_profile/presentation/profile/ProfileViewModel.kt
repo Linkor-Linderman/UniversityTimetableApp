@@ -98,7 +98,8 @@ class ProfileViewModel @Inject constructor(
             Constants.EXIT -> {
                 clearLocalDataUseCase()
                 _uiState.value = _uiState.value!!.copy(
-                    destinationString = Screen.FirstScreen.route
+                    destinationString = Screen.FirstScreen.route,
+                    isExit = true
                 )
             }
             Constants.CHOOSE_SCHEDULE -> {

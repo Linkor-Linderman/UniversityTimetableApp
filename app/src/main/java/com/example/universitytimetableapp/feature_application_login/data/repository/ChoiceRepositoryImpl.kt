@@ -2,7 +2,7 @@ package com.example.universitytimetableapp.feature_application_login.data.reposi
 
 import android.util.Log
 import com.example.universitytimetableapp.feature_application_login.data.api.ChoiceApi
-import com.example.universitytimetableapp.feature_application_login.domain.model.GroupsTeachersItem
+import com.example.universitytimetableapp.feature_application_login.domain.model.SelectionItem
 import com.example.universitytimetableapp.feature_application_login.domain.repository.ChoiceRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -14,9 +14,9 @@ class ChoiceRepositoryImpl @Inject constructor(
     private val api: ChoiceApi
 ) : ChoiceRepository {
 
-    override fun getExistingTeachers(): Flow<Result<List<GroupsTeachersItem>>> = flow {
+    override fun getExistingTeachers(): Flow<Result<List<SelectionItem>>> = flow {
         try {
-            val teacherList = api.getExistingTeachers().map { it.toGroupsTeachersItem() }
+            val teacherList = api.getExistingTeachers().map { it.toSelectionItem() }
             emit(Result.success(teacherList))
         }
         catch (e: Exception) {
@@ -25,13 +25,24 @@ class ChoiceRepositoryImpl @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
-    override fun getExistingGroups(): Flow<Result<List<GroupsTeachersItem>>> = flow {
+    override fun getExistingGroups(): Flow<Result<List<SelectionItem>>> = flow {
         try {
-            val groupList = api.getExistingGroups().map { it.toGroupsTeachersItem() }
+            val groupList = api.getExistingGroups().map { it.toSelectionItem() }
             emit(Result.success(groupList))
         }
         catch (e: Exception) {
             Log.e("OPS getExistingGroups", e.message.toString())
+            emit(Result.failure(e))
+        }
+    }.flowOn(Dispatchers.IO)
+
+    override fun getExistingClassroom(): Flow<Result<List<SelectionItem>>> = flow {
+        try {
+            val classroomList = api.getExistingClassroom().map { it.toSelectionItem() }
+            emit(Result.success(classroomList))
+        }
+        catch (e: Exception) {
+            Log.e("OPS getExistingClassroom", e.message.toString())
             emit(Result.failure(e))
         }
     }.flowOn(Dispatchers.IO)

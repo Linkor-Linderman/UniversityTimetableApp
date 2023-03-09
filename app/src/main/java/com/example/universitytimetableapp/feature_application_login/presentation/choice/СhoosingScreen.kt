@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
@@ -13,6 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
+import com.example.universitytimetableapp.common.Constants
+import com.example.universitytimetableapp.feature_application_login.presentation.AppProgressIndicator
 
 @Composable
 fun ChoosingScreen(
@@ -37,9 +40,24 @@ fun ChoosingScreen(
 
     val state by viewModel.uiState.observeAsState()
 
+    if (state!!.isLoading) {
+        AppProgressIndicator(Color.White)
+    }
     if (state!!.mayNavigate) {
         viewModel.setDefaultState()
-        navController.navigate(state!!.destinationString)
+        if (viewModel.case == Constants.CHANGE_GROUP) {
+            navController.popBackStack()
+        }
+        else {
+            navController.navigate(state!!.destinationString) {
+                if (viewModel.case == Constants.CHANGE_INIT_CHOICE_OR_GUEST) {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
+                }
+            }
+        }
+
     }
     else if (state!!.isRoleChosen) {
         ChoosingGroupOrTeacher(viewModel)

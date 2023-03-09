@@ -16,12 +16,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.common.Constants
+import com.example.universitytimetableapp.common.Screen
+import com.example.universitytimetableapp.feature_profile.presentation.AppProgressIndicator
 import com.example.universitytimetableapp.ui.theme.Jura
 import com.example.universitytimetableapp.ui.theme.Zekton
 import com.example.universitytimetableapp.ui.theme.brown
@@ -100,7 +103,8 @@ fun ProfileScreen(
                         fontFamily = Jura,
                         fontWeight = FontWeight.Medium,
                         fontSize = 17.sp,
-                        color = Color.White
+                        color = Color.White,
+                        textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.fillMaxWidth(0.35f))
                     Icon(
@@ -117,10 +121,14 @@ fun ProfileScreen(
     ) { padding ->
         if (state!!.mayNavigate) {
             viewModel.setDefaultState()
-            navController.navigate(state!!.destinationString)
+            navController.navigate(state!!.destinationString) {
+                if (state!!.isExit) {
+                    popUpTo(Screen.ProfileScreen.route) { inclusive = true }
+                }
+            }
         }
         if (state!!.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.fillMaxSize(), color = brown)
+            AppProgressIndicator(brown)
         }
         else if (state!!.isGuest) {
             GuestProfile(padding = padding, viewModel)

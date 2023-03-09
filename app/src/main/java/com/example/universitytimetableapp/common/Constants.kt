@@ -3,6 +3,7 @@ package com.example.universitytimetableapp.common
 object Constants {
     const val STUDENT = "Student"
     const val TEACHER = "Teacher"
+    const val CLASSROOM = "Classroom"
     const val REGISTER = "register"
     const val CHOOSE_SCHEDULE = "chooseSchedule"
     const val CHANGE_GROUP = "changeGroup"
