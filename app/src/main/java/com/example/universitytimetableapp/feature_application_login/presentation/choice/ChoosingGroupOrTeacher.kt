@@ -1,5 +1,6 @@
 package com.example.universitytimetableapp.feature_application_login.presentation.choice
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,6 +31,10 @@ fun ChoosingGroupOrTeacher(viewModel: ChoosingViewModel) {
     val chosenRole by viewModel.chosenRole.observeAsState()
     val chosenItem by viewModel.choosingItem.observeAsState()
 
+    BackHandler(enabled = viewModel.case != Constants.CHANGE_GROUP) {
+        viewModel.deselecting()
+    }
+    
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -41,6 +46,8 @@ fun ChoosingGroupOrTeacher(viewModel: ChoosingViewModel) {
                 stringResource(R.string.what_your_name)
             else if (chosenRole == Constants.TEACHER)
                 stringResource(R.string.choosing_teacher)
+            else if (chosenRole == Constants.CLASSROOM)
+                stringResource(R.string.choosing_classroom)
             else
                 stringResource(R.string.choosing_group),
             modifier = Modifier.padding(start = 25.dp, end = 25.dp),
@@ -63,10 +70,11 @@ fun ChoosingGroupOrTeacher(viewModel: ChoosingViewModel) {
                 .padding(start = 25.dp, end = 25.dp),
             placeholder = {
                 Text(
-                    text = if (chosenRole == Constants.TEACHER)
-                        stringResource(R.string.full_name)
-                    else
-                        stringResource(R.string.group_number),
+                    text = when (chosenRole) {
+                        Constants.TEACHER -> stringResource(R.string.full_name)
+                        Constants.CLASSROOM -> stringResource(R.string.classroom)
+                        else -> stringResource(R.string.group_number)
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     fontFamily = Jura,
                     fontWeight = FontWeight.Normal,

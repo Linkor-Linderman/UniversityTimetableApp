@@ -5,13 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.universitytimetableapp.common.Constants
+import com.example.universitytimetableapp.common.MessageSource
 import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_application_login.domain.model.LoginCredentials
 import com.example.universitytimetableapp.feature_application_login.domain.model.UserSettings
-import com.example.universitytimetableapp.feature_application_login.domain.use_case.GetAccountInfoUseCase
-import com.example.universitytimetableapp.feature_application_login.domain.use_case.IsEmailFormatUseCase
-import com.example.universitytimetableapp.feature_application_login.domain.use_case.LoginUseCase
-import com.example.universitytimetableapp.feature_application_login.domain.use_case.PutUserSettingsUseCase
+import com.example.universitytimetableapp.feature_application_login.domain.use_case.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,9 +17,11 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val isEmailFormatUseCase: IsEmailFormatUseCase,
+    private val isPasswordFormatUseCase: IsPasswordFormatUseCase,
     private val loginUseCase: LoginUseCase,
     private val getAccountInfoUseCase: GetAccountInfoUseCase,
     private val putUserSettingsUseCase: PutUserSettingsUseCase,
+    private val messageSource: MessageSource
 ) : ViewModel() {
     private val _uiState = MutableLiveData(LoginUiState())
     val uiState: LiveData<LoginUiState> = _uiState
@@ -44,7 +44,12 @@ class LoginViewModel @Inject constructor(
     }
 
     fun login() {
-        if (!isEmailFormatUseCase(_login.value!!)) {
+        _login.value = _login.value!!.trim()
+        _password.value = _password.value!!.trim()
+        if (!isValidInput()) {
+            _uiState.value = _uiState.value!!.copy(
+                isShowMessage = true
+            )
             return
         }
         viewModelScope.launch {
@@ -52,14 +57,19 @@ class LoginViewModel @Inject constructor(
                 result.onSuccess {
                     getAccountInfo()
                 }.onFailure {
-
+                    it.message?.let {  text ->
+                        _uiState.value = _uiState.value!!.copy(
+                            isShowMessage = true,
+                            message = text
+                        )
+                    }
                 }
             }
         }
     }
 
     fun setDefaultState() {
-        _uiState.value = _uiState.value!!.copy(mayNavigate = false)
+        _uiState.value = _uiState.value!!.copy(mayNavigate = false, isShowMessage = false)
     }
 
     private fun getAccountInfo() {
@@ -85,8 +95,9 @@ class LoginViewModel @Inject constructor(
                             else -> {
                                 _uiState.value = _uiState.value!!.copy(
                                     isShowMessage = true,
-                                    message = "Адмнистраторы и составители заходите в приложение под гостем"
-                                    //Тут можно автоматически послать на экран выбора роли
+                                    message = messageSource.getMessage(
+                                        MessageSource.MESSAGE_FOR_ADMIN_SCHEDULE_WRITER
+                                    )
                                 )
                                 return@onSuccess
                             }
@@ -98,7 +109,12 @@ class LoginViewModel @Inject constructor(
                         "${Screen.ScheduleScreen.route}/${userSettings.role}/${userSettings.idChosenItem}/${userSettings.nameChosenItem}"
                     )
                 }.onFailure {
-
+                    it.message?.let {  text ->
+                        _uiState.value = _uiState.value!!.copy(
+                            isShowMessage = true,
+                            message = text
+                        )
+                    }
                 }
             }
         }
@@ -106,5 +122,27 @@ class LoginViewModel @Inject constructor(
 
     private fun correctData() {
         _isCorrectData.value = _login.value!!.isNotEmpty() && _password.value!!.isNotEmpty()
+    }
+
+    private fun isValidInput() : Boolean {
+        if (!isEmailFormatUseCase(_login.value!!)) {
+            _uiState.value = _uiState.value!!.copy(
+                message = messageSource.getMessage(MessageSource.WRONG_EMAIL_FORMAT)
+            )
+            return false
+        }
+        if (_password.value!!.length !in 6..64) {
+            _uiState.value = _uiState.value!!.copy(
+                message = messageSource.getMessage(MessageSource.WRONG_PASSWORD_LENGTH)
+            )
+            return false
+        }
+        if (!isPasswordFormatUseCase(_password.value!!)) {
+            _uiState.value = _uiState.value!!.copy(
+                message = messageSource.getMessage(MessageSource.WRONG_PASSWORD_FORMAT)
+            )
+            return false
+        }
+        return true
     }
 }

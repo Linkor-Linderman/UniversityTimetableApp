@@ -2,8 +2,9 @@ package com.example.universitytimetableapp.feature_application_login.presentatio
 
 import androidx.lifecycle.*
 import com.example.universitytimetableapp.common.Constants
+import com.example.universitytimetableapp.common.MessageSource
 import com.example.universitytimetableapp.common.Screen
-import com.example.universitytimetableapp.feature_application_login.domain.model.GroupsTeachersItem
+import com.example.universitytimetableapp.feature_application_login.domain.model.SelectionItem
 import com.example.universitytimetableapp.feature_application_login.domain.model.UserSettings
 import com.example.universitytimetableapp.feature_application_login.domain.use_case.GetSelectionListUseCase
 import com.example.universitytimetableapp.feature_application_login.domain.use_case.PutUserSettingsUseCase
@@ -18,7 +19,8 @@ import javax.inject.Inject
 class ChoosingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getSelectionListUseCase: GetSelectionListUseCase,
-    private val putUserSettingsUseCase: PutUserSettingsUseCase
+    private val putUserSettingsUseCase: PutUserSettingsUseCase,
+    private val messageSource: MessageSource
 ) : ViewModel() {
 
     val case: String
@@ -36,13 +38,13 @@ class ChoosingViewModel @Inject constructor(
         _search.value = value
     }
 
-    private val _choosingItem = MutableLiveData<GroupsTeachersItem>(null)
-    val choosingItem: LiveData<GroupsTeachersItem> = _choosingItem
+    private val _choosingItem = MutableLiveData<SelectionItem>(null)
+    val choosingItem: LiveData<SelectionItem> = _choosingItem
     fun setChoosingItem(value: Int) {
         _choosingItem.value = _listWithFilter.value[value]
     }
 
-    private val _listWithFilter = MutableStateFlow(listOf<GroupsTeachersItem>())
+    private val _listWithFilter = MutableStateFlow(listOf<SelectionItem>())
     val listWithFilter = search
         .debounce(500)
         .combine(_listWithFilter) { text, list ->
@@ -72,6 +74,9 @@ class ChoosingViewModel @Inject constructor(
         else {
             studentEmail = ""
         }
+        if (case == Constants.CHOOSE_SCHEDULE || case == Constants.CHANGE_INIT_CHOICE_OR_GUEST) {
+            _uiState.value = ChoosingUiState(isClassroomShow = true)
+        }
     }
 
     fun choosingRole(role: String) {
@@ -84,6 +89,8 @@ class ChoosingViewModel @Inject constructor(
     fun deselecting() {
         if (case != Constants.CHANGE_GROUP) {
             _uiState.value = _uiState.value!!.copy(isRoleChosen = false)
+            _search.value = ""
+            _listWithFilter.value = emptyList()
         }
         else {
             _uiState.value = _uiState.value!!.copy(
@@ -96,6 +103,10 @@ class ChoosingViewModel @Inject constructor(
 
     fun goToNextScreen() {
         if (_choosingItem.value == null) {
+            _uiState.value = _uiState.value!!.copy(
+                isShowMessage = true,
+                message = messageSource.getMessage(MessageSource.DO_NOT_CHOOSING_ITEM)
+            )
             return
         }
         if (_uiState.value!!.isShowDialog) {
@@ -122,7 +133,7 @@ class ChoosingViewModel @Inject constructor(
     }
 
     fun setDefaultState() {
-        _uiState.value = _uiState.value!!.copy(mayNavigate = false)
+        _uiState.value = _uiState.value!!.copy(mayNavigate = false, isShowMessage = false)
     }
 
     private fun destinationFromCase(): String {
@@ -138,12 +149,26 @@ class ChoosingViewModel @Inject constructor(
     }
 
     private fun getListItem(role: String) {
+        _uiState.value = _uiState.value!!.copy(
+            isLoading = true
+        )
         viewModelScope.launch {
             getSelectionListUseCase(role).collect { result ->
                 result.onSuccess {
                     _listWithFilter.value = it
+                    _uiState.value = _uiState.value!!.copy(
+                        isLoading = false
+                    )
                 }.onFailure {
-
+                    _uiState.value = _uiState.value!!.copy(
+                        isLoading = false
+                    )
+                    it.message?.let {  text ->
+                        _uiState.value = _uiState.value!!.copy(
+                            isShowMessage = true,
+                            message = text
+                        )
+                    }
                 }
             }
         }

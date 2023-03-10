@@ -7,6 +7,8 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -21,6 +23,8 @@ import com.example.universitytimetableapp.ui.theme.Zekton
 
 @Composable
 fun ChoosingRole(navController: NavController, viewModel: ChoosingViewModel) {
+    val uiState by viewModel.uiState.observeAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -69,7 +73,26 @@ fun ChoosingRole(navController: NavController, viewModel: ChoosingViewModel) {
                 fontSize = 15.sp
             )
         }
-        Spacer(modifier = Modifier.fillMaxHeight(0.4f))
+        if (uiState!!.isClassroomShow) {
+            Spacer(modifier = Modifier.padding(15.dp))
+            Button(
+                onClick = { viewModel.choosingRole(Constants.CLASSROOM) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 25.dp, end = 25.dp)
+                    .height(50.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                shape = RoundedCornerShape(10.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.classroom),
+                    fontFamily = Jura,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
+                )
+            }
+        }
+        Spacer(modifier = Modifier.fillMaxHeight(if (uiState!!.isClassroomShow) 0.25f else 0.4f))
         TextButton(
             onClick = { navController.popBackStack() },
             modifier = Modifier

@@ -129,3 +129,13 @@ fun ChangePasswordField(
         visualTransformation = PasswordVisualTransformation()
     )
 }
+
+@Composable
+fun AppProgressIndicator(color: Color) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(modifier = Modifier.size(100.dp), color = color)
+    }
+}
