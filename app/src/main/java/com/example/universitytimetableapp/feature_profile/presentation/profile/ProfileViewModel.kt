@@ -65,6 +65,8 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun changePassword() {
+        _oldPassword.value = _oldPassword.value!!.trim()
+        _newPassword.value = _newPassword.value!!.trim()
         if (!isValidInput()) {
             _uiState.value = _uiState.value!!.copy(
                 isShowMessage = true

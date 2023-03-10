@@ -44,6 +44,8 @@ class LoginViewModel @Inject constructor(
     }
 
     fun login() {
+        _login.value = _login.value!!.trim()
+        _password.value = _password.value!!.trim()
         if (!isValidInput()) {
             _uiState.value = _uiState.value!!.copy(
                 isShowMessage = true

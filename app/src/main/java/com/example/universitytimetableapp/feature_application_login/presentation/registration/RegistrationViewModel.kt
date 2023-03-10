@@ -87,6 +87,7 @@ class RegistrationViewModel @Inject constructor(
     }
 
     fun register() {
+        trimInput()
         if (!isValidInput()) {
             _uiState.value = _uiState.value!!.copy(
                 isShowMessage = true
@@ -198,5 +199,14 @@ class RegistrationViewModel @Inject constructor(
             return false
         }
         return true
+    }
+
+    private fun trimInput() {
+        _surname.value = _surname.value!!.trim()
+        _name.value = _name.value!!.trim()
+        _patronymic.value = _patronymic.value!!.trim()
+        _email.value = _email.value!!.trim()
+        _password.value = _password.value!!.trim()
+        _confirmPassword.value = _confirmPassword.value!!.trim()
     }
 }
