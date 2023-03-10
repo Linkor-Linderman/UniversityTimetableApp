@@ -11,7 +11,7 @@ data class TeacherDto(
     fun toSelectionItem(): SelectionItem {
         return SelectionItem(
             id = id,
-            name = "$lastName $firstName ${patronymicName?: ""}"
+            name = "$lastName $firstName ${patronymicName?: ""}".trimEnd()
         )
     }
 }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class AccountRepositoryImpl @Inject constructor(
@@ -22,6 +23,14 @@ class AccountRepositoryImpl @Inject constructor(
         try {
             val account = api.getAccount().toUserAccount()
             emit(Result.success(account))
+        }
+        catch (e: HttpException) {
+            if (e.code() == 401) {
+                emit(Result.failure(Exception()))
+            }
+            else {
+                emit(Result.failure(e))
+            }
         }
         catch (e: Exception) {
             Log.e("OPS getUserAccount", e.message.toString())

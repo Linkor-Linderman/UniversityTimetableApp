@@ -5,11 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.universitytimetableapp.common.Constants
+import com.example.universitytimetableapp.common.MessageSource
 import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_profile.domain.model.PasswordChange
 import com.example.universitytimetableapp.feature_profile.domain.use_case.ChangePasswordUseCase
 import com.example.universitytimetableapp.feature_profile.domain.use_case.ClearLocalDataUseCase
 import com.example.universitytimetableapp.feature_profile.domain.use_case.GetUserAccountUseCase
+import com.example.universitytimetableapp.feature_profile.domain.use_case.IsPasswordFormatUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +20,9 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val getUserAccountUseCase: GetUserAccountUseCase,
     private val changePasswordUseCase: ChangePasswordUseCase,
-    private val clearLocalDataUseCase: ClearLocalDataUseCase
+    private val clearLocalDataUseCase: ClearLocalDataUseCase,
+    private val isPasswordFormatUseCase: IsPasswordFormatUseCase,
+    private val messageSource: MessageSource
 ) : ViewModel() {
 
     private val _uiState = MutableLiveData(ProfileUiState())
@@ -61,7 +65,12 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun changePassword() {
-        // Проверка
+        if (!isValidInput()) {
+            _uiState.value = _uiState.value!!.copy(
+                isShowMessage = true
+            )
+            return
+        }
         viewModelScope.launch {
             changePasswordUseCase(
                 PasswordChange(
@@ -72,7 +81,12 @@ class ProfileViewModel @Inject constructor(
                 result.onSuccess {
                     showOrCloseDialog()
                 }.onFailure {
-
+                    it.message?.let {  text ->
+                        _uiState.value = _uiState.value!!.copy(
+                            isShowMessage = true,
+                            message = text
+                        )
+                    }
                 }
             }
         }
@@ -120,7 +134,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun setDefaultState() {
-        _uiState.value = _uiState.value!!.copy(mayNavigate = false)
+        _uiState.value = _uiState.value!!.copy(mayNavigate = false, isShowMessage = false)
     }
 
     private fun correctData() {
@@ -150,8 +164,30 @@ class ProfileViewModel @Inject constructor(
                     _uiState.value = _uiState.value!!.copy(
                         isLoading = false
                     )
+                    it.message?.let {  text ->
+                        _uiState.value = _uiState.value!!.copy(
+                            isShowMessage = true,
+                            message = text
+                        )
+                    }
                 }
             }
         }
+    }
+
+    private fun isValidInput() : Boolean {
+        if (_newPassword.value!!.length !in 6..64) {
+            _uiState.value = _uiState.value!!.copy(
+                message = messageSource.getMessage(MessageSource.WRONG_PASSWORD_LENGTH)
+            )
+            return false
+        }
+        if (!isPasswordFormatUseCase(_newPassword.value!!)) {
+            _uiState.value = _uiState.value!!.copy(
+                message = messageSource.getMessage(MessageSource.WRONG_PASSWORD_FORMAT)
+            )
+            return false
+        }
+        return true
     }
 }

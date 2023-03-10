@@ -5,7 +5,7 @@ import com.example.universitytimetableapp.feature_application_login.domain.model
 data class StudyRoomDto(
     val buildingNumber: Int,
     val floor: Int?,
-    val name: String,
+    val name: String?,
     val number: String,
     val id: String
 ) {
@@ -16,7 +16,7 @@ data class StudyRoomDto(
             ", $floor этаж"
         return SelectionItem(
             id = id,
-            name = "$number ($buildingNumber корпус$floorString) $name"
+            name = "$number ($buildingNumber корпус$floorString) ${name?: ""}".trimEnd()
         )
     }
 }

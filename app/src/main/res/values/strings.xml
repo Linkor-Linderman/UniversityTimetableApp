@@ -52,6 +52,12 @@
     <string name="new_password">Новый пароль</string>
     <string name="changing">Сменить</string>
     <string name="classroom">Аудитория</string>
+    <string name="wrong_email_format">Неверный формат почты</string>
+    <string name="wrong_password_length">Пароль должен быть длинной 6–64 символа</string>
+    <string name="wrong_password_format">Пароль должен содержать хотя бы одну букву и цифру</string>
+    <string name="password_not_equal_with_confirm">Поля пароль и подтвердите пароль не совпадают</string>
+    <string name="do_not_choosing_item">Выберите элемент из списка</string>
+    <string name="for_admin_schedule_writer">Админы и составители заходите в приложение под гостем</string>
 
     <string name="January">Январь</string>
     <string name="February">Февраль</string>

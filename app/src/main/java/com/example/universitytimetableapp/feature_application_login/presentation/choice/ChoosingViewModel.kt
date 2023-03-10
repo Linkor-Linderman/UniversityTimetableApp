@@ -2,6 +2,7 @@ package com.example.universitytimetableapp.feature_application_login.presentatio
 
 import androidx.lifecycle.*
 import com.example.universitytimetableapp.common.Constants
+import com.example.universitytimetableapp.common.MessageSource
 import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_application_login.domain.model.SelectionItem
 import com.example.universitytimetableapp.feature_application_login.domain.model.UserSettings
@@ -18,7 +19,8 @@ import javax.inject.Inject
 class ChoosingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getSelectionListUseCase: GetSelectionListUseCase,
-    private val putUserSettingsUseCase: PutUserSettingsUseCase
+    private val putUserSettingsUseCase: PutUserSettingsUseCase,
+    private val messageSource: MessageSource
 ) : ViewModel() {
 
     val case: String
@@ -101,6 +103,10 @@ class ChoosingViewModel @Inject constructor(
 
     fun goToNextScreen() {
         if (_choosingItem.value == null) {
+            _uiState.value = _uiState.value!!.copy(
+                isShowMessage = true,
+                message = messageSource.getMessage(MessageSource.DO_NOT_CHOOSING_ITEM)
+            )
             return
         }
         if (_uiState.value!!.isShowDialog) {
@@ -127,7 +133,7 @@ class ChoosingViewModel @Inject constructor(
     }
 
     fun setDefaultState() {
-        _uiState.value = _uiState.value!!.copy(mayNavigate = false)
+        _uiState.value = _uiState.value!!.copy(mayNavigate = false, isShowMessage = false)
     }
 
     private fun destinationFromCase(): String {
@@ -157,6 +163,12 @@ class ChoosingViewModel @Inject constructor(
                     _uiState.value = _uiState.value!!.copy(
                         isLoading = false
                     )
+                    it.message?.let {  text ->
+                        _uiState.value = _uiState.value!!.copy(
+                            isShowMessage = true,
+                            message = text
+                        )
+                    }
                 }
             }
         }

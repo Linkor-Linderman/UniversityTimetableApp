@@ -1,5 +1,7 @@
 package com.example.universitytimetableapp.feature_application_login.presentation.choice
 
+import android.view.Gravity
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -9,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -42,6 +45,12 @@ fun ChoosingScreen(
 
     if (state!!.isLoading) {
         AppProgressIndicator(Color.White)
+    }
+    if (state!!.isShowMessage) {
+        Toast.makeText(LocalContext.current, state!!.message, Toast.LENGTH_SHORT).apply {
+            setGravity(Gravity.FILL_HORIZONTAL, 0, 0)
+        }.show()
+        viewModel.setDefaultState()
     }
     if (state!!.mayNavigate) {
         viewModel.setDefaultState()

@@ -2,14 +2,12 @@ package com.example.universitytimetableapp.feature_application_login.presentatio
 
 import androidx.lifecycle.*
 import com.example.universitytimetableapp.common.Constants
+import com.example.universitytimetableapp.common.MessageSource
 import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_application_login.domain.model.StudentRegistration
 import com.example.universitytimetableapp.feature_application_login.domain.model.TeacherRegistration
 import com.example.universitytimetableapp.feature_application_login.domain.model.UserSettings
-import com.example.universitytimetableapp.feature_application_login.domain.use_case.IsEmailFormatUseCase
-import com.example.universitytimetableapp.feature_application_login.domain.use_case.PutUserSettingsUseCase
-import com.example.universitytimetableapp.feature_application_login.domain.use_case.RegisterStudentUseCase
-import com.example.universitytimetableapp.feature_application_login.domain.use_case.RegisterTeacherUseCase
+import com.example.universitytimetableapp.feature_application_login.domain.use_case.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,9 +16,11 @@ import javax.inject.Inject
 class RegistrationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val isEmailFormatUseCase: IsEmailFormatUseCase,
+    private val isPasswordFormatUseCase: IsPasswordFormatUseCase,
     private val registerTeacherUseCase: RegisterTeacherUseCase,
     private val registerStudentUseCase: RegisterStudentUseCase,
-    private val putUserSettingsUseCase: PutUserSettingsUseCase
+    private val putUserSettingsUseCase: PutUserSettingsUseCase,
+    private val messageSource: MessageSource
 ) : ViewModel() {
     val role: String
     private val groupOrTeacherId: String
@@ -82,12 +82,15 @@ class RegistrationViewModel @Inject constructor(
             val fullName = groupOrTeacherName.split(" ")
             _surname.value = fullName[0]
             _name.value = fullName[1]
-            _patronymic.value = fullName[2]
+            _patronymic.value = if (fullName.size < 3) "" else fullName[2]
         }
     }
 
     fun register() {
-        if (!isEmailFormatUseCase(_email.value!!)) {
+        if (!isValidInput()) {
+            _uiState.value = _uiState.value!!.copy(
+                isShowMessage = true
+            )
             return
         }
         viewModelScope.launch {
@@ -103,7 +106,12 @@ class RegistrationViewModel @Inject constructor(
                         saveSettings()
                         goToNextScreen()
                     }.onFailure {
-
+                        it.message?.let {  text ->
+                            _uiState.value = _uiState.value!!.copy(
+                                isShowMessage = true,
+                                message = text
+                            )
+                        }
                     }
                 }
             } else {
@@ -111,7 +119,7 @@ class RegistrationViewModel @Inject constructor(
                     StudentRegistration(
                         surname = _surname.value!!,
                         name = _name.value!!,
-                        patronymic = _patronymic.value!!,
+                        patronymic = _patronymic.value!!.ifEmpty { null },
                         groupId = groupOrTeacherId,
                         email = _email.value!!,
                         password = _password.value!!
@@ -121,7 +129,12 @@ class RegistrationViewModel @Inject constructor(
                         saveSettings()
                         goToNextScreen()
                     }.onFailure {
-
+                        it.message?.let {  text ->
+                            _uiState.value = _uiState.value!!.copy(
+                                isShowMessage = true,
+                                message = text
+                            )
+                        }
                     }
                 }
             }
@@ -142,13 +155,13 @@ class RegistrationViewModel @Inject constructor(
     }
 
     fun setDefaultState() {
-        _uiState.value = _uiState.value!!.copy(mayNavigate = false)
+        _uiState.value = _uiState.value!!.copy(mayNavigate = false, isShowMessage = false)
     }
 
     private fun correctData() {
-        _isCorrectData.value = _surname.value!!.isNotEmpty() && _name.value!!.isNotEmpty() && _patronymic.value!!.isNotEmpty() &&
+        _isCorrectData.value = _surname.value!!.isNotEmpty() && _name.value!!.isNotEmpty()  &&
                 _email.value!!.isNotEmpty() && _password.value!!.isNotEmpty() &&
-                _confirmPassword.value!!.isNotEmpty() && _password.value == _confirmPassword.value
+                _confirmPassword.value!!.isNotEmpty()
     }
 
     private fun saveSettings() {
@@ -157,5 +170,33 @@ class RegistrationViewModel @Inject constructor(
             idChosenItem = groupOrTeacherId,
             nameChosenItem = groupOrTeacherName
         ))
+    }
+
+    private fun isValidInput() : Boolean {
+        if (!isEmailFormatUseCase(_email.value!!)) {
+            _uiState.value = _uiState.value!!.copy(
+                message = messageSource.getMessage(MessageSource.WRONG_EMAIL_FORMAT)
+            )
+            return false
+        }
+        if (_password.value!!.length !in 6..64) {
+            _uiState.value = _uiState.value!!.copy(
+                message = messageSource.getMessage(MessageSource.WRONG_PASSWORD_LENGTH)
+            )
+            return false
+        }
+        if (!isPasswordFormatUseCase(_password.value!!)) {
+            _uiState.value = _uiState.value!!.copy(
+                message = messageSource.getMessage(MessageSource.WRONG_PASSWORD_FORMAT)
+            )
+            return false
+        }
+        if (_password.value != _confirmPassword.value) {
+            _uiState.value = _uiState.value!!.copy(
+                message = messageSource.getMessage(MessageSource.PASSWORD_NOT_EQUAL_WITH_CONFIRM)
+            )
+            return false
+        }
+        return true
     }
 }

@@ -5,7 +5,7 @@ import com.example.universitytimetableapp.feature_application_login.domain.model
 data class StudentRegisterDto(
     val firstName: String,
     val lastName: String,
-    val patronymicName: String,
+    val patronymicName: String?,
     val groupId: String,
     val email: String,
     val password: String

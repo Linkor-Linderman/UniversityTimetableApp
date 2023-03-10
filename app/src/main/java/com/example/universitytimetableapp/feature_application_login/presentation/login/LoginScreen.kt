@@ -1,5 +1,6 @@
 package com.example.universitytimetableapp.feature_application_login.presentation.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -29,6 +31,10 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.observeAsState()
+    if (state!!.isShowMessage) {
+        Toast.makeText(LocalContext.current, state!!.message, Toast.LENGTH_SHORT).show()
+        viewModel.setDefaultState()
+    }
     if (state!!.mayNavigate) {
         viewModel.setDefaultState()
         navController.navigate(state!!.destinationString) {

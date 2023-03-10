@@ -6,7 +6,7 @@ data class AccountDto(
     val id: String,
     val firstName: String,
     val lastName: String,
-    val patronymicName: String,
+    val patronymicName: String?,
     val role: String,
     val group: GroupDto?,
     val teacherId: String,
@@ -14,7 +14,7 @@ data class AccountDto(
 ) {
     fun toAccountInfo(): AccountInfo {
         return AccountInfo(
-            full_name = "$lastName $firstName $patronymicName",
+            full_name = "$lastName $firstName ${patronymicName?: ""}".trimEnd(),
             role = role,
             group = group,
             teacherId = teacherId,

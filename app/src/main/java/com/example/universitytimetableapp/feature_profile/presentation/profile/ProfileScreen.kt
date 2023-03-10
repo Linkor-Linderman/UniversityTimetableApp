@@ -1,5 +1,6 @@
 package com.example.universitytimetableapp.feature_profile.presentation.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +14,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -119,6 +121,10 @@ fun ProfileScreen(
             }
         }
     ) { padding ->
+        if (state!!.isShowMessage) {
+            Toast.makeText(LocalContext.current, state!!.message, Toast.LENGTH_SHORT).show()
+            viewModel.setDefaultState()
+        }
         if (state!!.mayNavigate) {
             viewModel.setDefaultState()
             navController.navigate(state!!.destinationString) {
