@@ -21,7 +21,7 @@ class ChoiceRepositoryImpl @Inject constructor(
         }
         catch (e: Exception) {
             Log.e("OPS getExistingTeachers", e.message.toString())
-            emit(Result.failure(e))
+            emit(Result.failure(catchError(e)))
         }
     }.flowOn(Dispatchers.IO)
 
@@ -32,7 +32,7 @@ class ChoiceRepositoryImpl @Inject constructor(
         }
         catch (e: Exception) {
             Log.e("OPS getExistingGroups", e.message.toString())
-            emit(Result.failure(e))
+            emit(Result.failure(catchError(e)))
         }
     }.flowOn(Dispatchers.IO)
 
@@ -43,7 +43,7 @@ class ChoiceRepositoryImpl @Inject constructor(
         }
         catch (e: Exception) {
             Log.e("OPS getExistingClassroom", e.message.toString())
-            emit(Result.failure(e))
+            emit(Result.failure(catchError(e)))
         }
     }.flowOn(Dispatchers.IO)
 
@@ -54,7 +54,7 @@ class ChoiceRepositoryImpl @Inject constructor(
         }
         catch (e: Exception) {
             Log.e("OPS changeGroup", e.message.toString())
-            emit(Result.failure(e))
+            emit(Result.failure(catchError(e)))
         }
     }.flowOn(Dispatchers.IO)
 }

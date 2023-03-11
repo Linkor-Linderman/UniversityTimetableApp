@@ -1,11 +1,10 @@
 package com.example.universitytimetableapp.feature_schedule.presentation.common_composable
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -16,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.ui.theme.Jura
-import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun RowWithTextAndIcon(
@@ -26,7 +24,10 @@ fun RowWithTextAndIcon(
     textSize: TextUnit = 12.sp,
     spaceBetweenIconAndText: Dp = 7.dp
 ) {
-    FlowRow() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Icon(
             modifier = Modifier.size(iconSize),
             painter = painter,

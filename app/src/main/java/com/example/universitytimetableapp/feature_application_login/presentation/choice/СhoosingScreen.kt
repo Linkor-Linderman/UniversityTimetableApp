@@ -68,7 +68,7 @@ fun ChoosingScreen(
         }
 
     }
-    else if (state!!.isRoleChosen) {
+    if (state!!.isRoleChosen) {
         ChoosingGroupOrTeacher(viewModel)
     }
     else {

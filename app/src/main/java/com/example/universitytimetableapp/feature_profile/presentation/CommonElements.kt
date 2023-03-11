@@ -125,6 +125,7 @@ fun ChangePasswordField(
             focusedBorderColor = brown,
             unfocusedBorderColor = brown,
         ),
+        singleLine = true,
         shape = RoundedCornerShape(6.dp),
         visualTransformation = PasswordVisualTransformation()
     )

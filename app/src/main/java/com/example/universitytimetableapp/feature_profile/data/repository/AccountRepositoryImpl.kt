@@ -25,8 +25,8 @@ class AccountRepositoryImpl @Inject constructor(
             emit(Result.success(account))
         }
         catch (e: HttpException) {
-            if (e.code() == 401) {
-                emit(Result.failure(Exception()))
+            if (e.code() == 401 || e.code() == 403) {
+                emit(Result.failure(Throwable()))
             }
             else {
                 emit(Result.failure(e))
@@ -45,6 +45,17 @@ class AccountRepositoryImpl @Inject constructor(
         }
         catch (e: Exception) {
             Log.e("OPS changePassword", e.message.toString())
+            emit(Result.failure(catchError(e)))
+        }
+    }.flowOn(Dispatchers.IO)
+
+    override fun logout(): Flow<Result<Unit>> = flow {
+        try {
+            api.logout()
+            emit(Result.success(Unit))
+        }
+        catch (e: Exception) {
+            Log.e("OPS logout", e.message.toString())
             emit(Result.failure(e))
         }
     }.flowOn(Dispatchers.IO)

@@ -8,10 +8,7 @@ import com.example.universitytimetableapp.common.Constants
 import com.example.universitytimetableapp.common.MessageSource
 import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_profile.domain.model.PasswordChange
-import com.example.universitytimetableapp.feature_profile.domain.use_case.ChangePasswordUseCase
-import com.example.universitytimetableapp.feature_profile.domain.use_case.ClearLocalDataUseCase
-import com.example.universitytimetableapp.feature_profile.domain.use_case.GetUserAccountUseCase
-import com.example.universitytimetableapp.feature_profile.domain.use_case.IsPasswordFormatUseCase
+import com.example.universitytimetableapp.feature_profile.domain.use_case.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,6 +19,7 @@ class ProfileViewModel @Inject constructor(
     private val changePasswordUseCase: ChangePasswordUseCase,
     private val clearLocalDataUseCase: ClearLocalDataUseCase,
     private val isPasswordFormatUseCase: IsPasswordFormatUseCase,
+    private val logoutUseCase: LogoutUseCase,
     private val messageSource: MessageSource
 ) : ViewModel() {
 
@@ -112,6 +110,7 @@ class ProfileViewModel @Inject constructor(
                 )
             }
             Constants.EXIT -> {
+                logout()
                 clearLocalDataUseCase()
                 _uiState.value = _uiState.value!!.copy(
                     destinationString = Screen.FirstScreen.route,
@@ -191,5 +190,12 @@ class ProfileViewModel @Inject constructor(
             return false
         }
         return true
+    }
+    private fun logout() {
+        viewModelScope.launch {
+            logoutUseCase().collect { result ->
+                result.onSuccess {}.onFailure {}
+            }
+        }
     }
 }

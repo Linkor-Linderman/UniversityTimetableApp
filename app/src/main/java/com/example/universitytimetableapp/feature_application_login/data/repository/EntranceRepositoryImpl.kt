@@ -30,7 +30,7 @@ class EntranceRepositoryImpl @Inject constructor(
         }
         catch (e: Exception) {
             Log.e("OPS signIn", e.message.toString())
-            emit(Result.failure(e))
+            emit(Result.failure(catchError(e)))
         }
     }.flowOn(Dispatchers.IO)
 
@@ -41,7 +41,7 @@ class EntranceRepositoryImpl @Inject constructor(
         }
         catch (e: Exception) {
             Log.e("OPS registerTeacher", e.message.toString())
-            emit(Result.failure(e))
+            emit(Result.failure(catchError(e)))
         }
     }.flowOn(Dispatchers.IO)
 
@@ -52,7 +52,7 @@ class EntranceRepositoryImpl @Inject constructor(
         }
         catch (e: Exception) {
             Log.e("OPS registerStudent", e.message.toString())
-            emit(Result.failure(e))
+            emit(Result.failure(catchError(e)))
         }
     }.flowOn(Dispatchers.IO)
 
@@ -63,7 +63,7 @@ class EntranceRepositoryImpl @Inject constructor(
         }
         catch (e: Exception) {
             Log.e("OPS getAccountInfo", e.message.toString())
-            emit(Result.failure(e))
+            emit(Result.failure(catchError(e)))
         }
     }.flowOn(Dispatchers.IO)
 }

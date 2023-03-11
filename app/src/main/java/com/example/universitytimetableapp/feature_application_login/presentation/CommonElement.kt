@@ -59,6 +59,7 @@ fun InputField(
             unfocusedBorderColor = greyLight,
             disabledBorderColor = white10
         ),
+        singleLine = true,
         shape = RoundedCornerShape(8.dp),
         visualTransformation = if (isPassword)
             PasswordVisualTransformation()

@@ -10,5 +10,7 @@ interface AccountRepository {
 
     fun changePassword(passwordChange: PasswordChange): Flow<Result<Unit>>
 
+    fun logout(): Flow<Result<Unit>>
+
     fun clearLocalUserData()
 }

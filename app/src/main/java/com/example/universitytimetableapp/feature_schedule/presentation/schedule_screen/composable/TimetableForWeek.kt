@@ -152,7 +152,7 @@ fun TimeTableForWeek(
                     },
                     icon = {
                         Column(
-                            modifier = Modifier.width(17.dp),
+                            modifier = Modifier.width(18.5.dp),
                         ) {
                             Row(
                                 modifier = Modifier.width(17.dp),
@@ -163,13 +163,12 @@ fun TimeTableForWeek(
                                     fontSize = 10.sp,
                                     fontFamily = Zekton,
                                     color = Color.White,
-                                    maxLines = 1,
                                 )
                             }
                             Spacer(modifier = Modifier.height(4.dp))
                             Box(
                                 modifier = Modifier
-                                    .width(17.dp)
+                                    .width(18.5.dp)
                                     .height(21.dp)
                                     .clip(RoundedCornerShape(5.dp))
                                     .background(
@@ -183,6 +182,7 @@ fun TimeTableForWeek(
                                     fontSize = 14.sp,
                                     fontFamily = Zekton,
                                     color = Color.White,
+                                    maxLines = 1
                                 )
                             }
                         }

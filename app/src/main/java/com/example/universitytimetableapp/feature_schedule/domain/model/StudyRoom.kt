@@ -7,7 +7,7 @@ data class StudyRoom(
     val number: String
 ) {
     fun getStudyRoomLocal(): String {
-        val floor = if (floor != null) "(${floor})" else ""
-        return  "$number $buildingNumber $floor ${name ?: ""}"
+        val floorString = if (floor != null) ", $floor этаж" else ""
+        return  "$number ($buildingNumber корпус$floorString) ${name?: ""}".trimEnd()
     }
 }
