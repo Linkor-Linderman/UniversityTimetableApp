@@ -29,21 +29,31 @@ class GetScheduleForWeekByTeacherId @Inject constructor(
 
                 val listOfScheduleItemForWeek = mutableListOf<ScheduleItemsForDay>()
 
+                Log.i(
+                    "listOfScheduleForDaySIZE",
+                    listOfScheduleForDay.size.toString(),
+                )
                 for (scheduleForDay in listOfScheduleForDay) {
-                    var previousLessonNumber = 0
+                    var previousLessonNumber = listOfLessonTime[0].lessonNumber
                     val listOfScheduleItemCard = mutableListOf<ScheduleItem>()
-                    for (lessonIndex in 0..scheduleForDay.lessons.size - 2) {
+                    Log.i(
+                        "scheduleForDay.lessons.size",
+                        scheduleForDay.lessons.size.toString(),
+                    )
+                    for (lessonIndex in 0 until scheduleForDay.lessons.size) {
                         val lessonNumberForCurrentLesson =
                             scheduleForDay.lessons[lessonIndex].lessonTime.lessonNumber
                         val lessonNumberForNextLesson =
-                            scheduleForDay.lessons[lessonIndex + 1].lessonTime.lessonNumber
-
+                            if (lessonIndex + 1 < scheduleForDay.lessons.size)
+                                scheduleForDay.lessons[lessonIndex + 1].lessonTime.lessonNumber
+                            else
+                                lessonNumberForCurrentLesson
                         if (lessonNumberForCurrentLesson > previousLessonNumber) {
                             listOfScheduleItemCard.add(
                                 ScheduleItem.WindowItem(
                                     windowNumber = (lessonNumberForCurrentLesson - previousLessonNumber).toString(),
-                                    startTime = listOfLessonTime[previousLessonNumber].startTime,
-                                    endTime = listOfLessonTime[lessonNumberForCurrentLesson - 1].endTime
+                                    startTime = listOfLessonTime[previousLessonNumber-1].startTime,
+                                    endTime = listOfLessonTime[lessonNumberForCurrentLesson - 2].endTime
                                 )
                             )
                         }
@@ -68,13 +78,6 @@ class GetScheduleForWeekByTeacherId @Inject constructor(
                                     endTime = scheduleForDay.lessons[lessonIndex + 1].lessonTime.startTime
                                 )
                             )
-                            if (lessonIndex == scheduleForDay.lessons.size - 2 && lessonNumberForNextLesson - lessonNumberForCurrentLesson == 1) {
-                                listOfScheduleItemCard.add(
-                                    ScheduleItem.SubjectItem(
-                                        lesson = scheduleForDay.lessons[lessonIndex + 1]
-                                    )
-                                )
-                            }
                         }
 
 

@@ -3,6 +3,8 @@ package com.example.universitytimetableapp.feature_schedule.presentation.schedul
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -17,10 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.common.Screen
-import com.example.universitytimetableapp.feature_schedule.domain.model.EndTime
-import com.example.universitytimetableapp.feature_schedule.domain.model.ScheduleItem
-import com.example.universitytimetableapp.feature_schedule.domain.model.ScheduleItemsForDay
-import com.example.universitytimetableapp.feature_schedule.domain.model.StartTime
+import com.example.universitytimetableapp.feature_schedule.domain.model.*
 import com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.composable.cards.BreakCard
 import com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.composable.cards.SubjectTimeslotCard
 import com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.composable.cards.WindowCard
@@ -35,11 +34,14 @@ fun TimetablePageForDay(
     scheduleItemsForDay: ScheduleItemsForDay
 ) {
     val listOfScheduleItemCard = scheduleItemsForDay.listOfScheduleItemCard
+    val onlineWord = stringResource(id = R.string.online)
 
     if (listOfScheduleItemCard.isEmpty()) {
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            contentAlignment = Alignment.Center,
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -79,14 +81,13 @@ fun TimetablePageForDay(
                                         item.lesson.subject.name,
                                         item.lesson.lessonTime.getTimePeriod(),
                                         item.lesson.lessonTime.lessonNumber.toString(),
-                                        "${item.lesson.teacher.lastName} ${item.lesson.teacher.firstName} ${item.lesson.teacher.patronymicName}",
+                                        item.lesson.teacher.getFullName(),
                                         item.lesson.lessonType.name,
-                                        "${item.lesson.studyRoom.buildingNumber}  ${item.lesson.studyRoom.number} (${item.lesson.studyRoom.floor}) ${item.lesson.studyRoom.name}",
-                                        buildString {
-                                            item.lesson.groups.forEach {
-                                                append(it.number + ", ")
-                                            }
-                                        }.dropLast(2),
+                                        if (item.lesson.studyRoom == null)
+                                            onlineWord
+                                        else
+                                            item.lesson.studyRoom.getStudyRoomLocal(),
+                                        item.lesson.getGroupsString(),
                                     )
                                 )
                             },
@@ -107,8 +108,8 @@ fun TimetablePageForDay(
 }
 
 fun getPeriodInMinutes(
-    startTime: EndTime,
-    endTime: StartTime
+    startTime: LocalTimeModel,
+    endTime: LocalTimeModel
 ): String {
     val format = SimpleDateFormat("HH:mm")
     val date1: Date = format.parse("${startTime.hour}:${startTime.minute}")

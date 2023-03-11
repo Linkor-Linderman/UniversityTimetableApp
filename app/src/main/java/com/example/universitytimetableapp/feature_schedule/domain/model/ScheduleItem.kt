@@ -7,12 +7,12 @@ sealed class ScheduleItem {
 
     data class WindowItem(
         val windowNumber: String,
-        val startTime: StartTime,
-        val endTime: EndTime
+        val startTime: LocalTimeModel,
+        val endTime: LocalTimeModel
     ) : ScheduleItem()
 
     data class BreakItem(
-        val startTime: EndTime,
-        val endTime: StartTime
+        val startTime: LocalTimeModel,
+        val endTime: LocalTimeModel
     ) : ScheduleItem()
 }

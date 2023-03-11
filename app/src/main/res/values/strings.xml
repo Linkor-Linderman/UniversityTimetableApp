@@ -65,5 +65,6 @@
     <string name="December">Декабрь</string>
     <string name="couple">Пара</string>
     <string name="minutes">минут</string>
+    <string name="online">Онлайн</string>
     <string name="empty_day">В этот день у Вас нет пар!</string>
 </resources>

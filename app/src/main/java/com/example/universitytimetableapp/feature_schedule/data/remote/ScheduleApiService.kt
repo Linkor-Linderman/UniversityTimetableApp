@@ -24,8 +24,4 @@ interface ScheduleApiService {
 
     @GET("/api/v1/schedule/lesson-time")
     suspend fun getLessonsTimeDetail(): List<LessonTimeDto>
-
-    companion object {
-        const val BASE_URL = "http://81.177.196.180:48656/"
-    }
 }

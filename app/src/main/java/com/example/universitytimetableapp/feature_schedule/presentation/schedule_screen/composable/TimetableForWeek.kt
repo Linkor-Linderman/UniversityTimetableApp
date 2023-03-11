@@ -5,11 +5,14 @@ import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
@@ -34,13 +37,18 @@ import com.example.universitytimetableapp.ui.theme.greyForSelectedDay
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @ExperimentalPagerApi
 @Composable
 fun TimeTableForWeek(
     modifier: Modifier = Modifier,
     state: ScheduleScreenState,
+    refresh: () -> Unit,
     onEvent: (ScheduleScreenEvent) -> Unit,
     navController: NavController
 ) {
@@ -56,14 +64,18 @@ fun TimeTableForWeek(
     )
     val pagerState = rememberPagerState(
         pageCount = nameOfDaysOfTheWeek.size,
-        initialOffscreenLimit = 3,
+        initialOffscreenLimit = 4,
         infiniteLoop = true,
         initialPage = state.initialDay.dayOfWeek - 1,
     )
+
+    val isRefreshing = rememberSwipeRefreshState(isRefreshing = state.isRefreshing)
+
     val tabIndex = remember {
         mutableStateOf(pagerState.currentPage)
     }
     val coroutineScope = rememberCoroutineScope()
+    val pullRefreshState = rememberPullRefreshState(isRefreshing.isRefreshing, refresh)
 
     Column(
         modifier = modifier
@@ -112,7 +124,9 @@ fun TimeTableForWeek(
                     pagerState.isScrollInProgress && pagerState.targetPage == index
                 ) {
                     color.animateTo(
-                        if (pagerState.currentPage == index && !pagerState.isScrollInProgress || pagerState.isScrollInProgress && pagerState.targetPage == index)
+                        if (pagerState.currentPage == index && !pagerState.isScrollInProgress
+                            || pagerState.isScrollInProgress && pagerState.targetPage == index
+                        )
                             greyForSelectedDay
                         else
                             Color.Transparent,
@@ -194,55 +208,74 @@ fun TimeTableForWeek(
             }
         }
 
-        if (state.scheduleItemsForWeek.isNotEmpty()) {
-            HorizontalPager(
-                state = pagerState,
-            ) { index ->
-                TimetablePageForDay(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 18.dp, vertical = 20.dp),
-                    navController = navController,
-                    scheduleItemsForDay = state.scheduleItemsForWeek[index]
+        SwipeRefresh(
+            state = isRefreshing,
+            onRefresh = refresh,
+            indicator = { state, trigger ->
+                SwipeRefreshIndicator(
+                    state = state,
+                    refreshTriggerDistance = trigger,
+                    contentColor = brown,
+                    backgroundColor = Color.LightGray
                 )
             }
-        } else if (state.errorMessage.isNotBlank()) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Center
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Warning,
-                        contentDescription = "Warning icon",
-                        modifier = Modifier.size(50.dp),
-                        tint = Color.LightGray
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = state.errorMessage,
-                        color = Color.LightGray,
-                        fontSize = 20.sp,
-                        textAlign = TextAlign.Center,
-                        fontFamily = Jura,
-                        fontWeight = FontWeight.Bold,
+        ) {
+            if (state.scheduleItemsForWeek.isNotEmpty()) {
+                HorizontalPager(
+                    state = pagerState,
+                ) { index ->
+                    TimetablePageForDay(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp)
+                            .fillMaxSize()
+                            .padding(horizontal = 18.dp, vertical = 20.dp),
+                        navController = navController,
+                        scheduleItemsForDay = state.scheduleItemsForWeek[index]
                     )
                 }
-            }
-        } else if (state.isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Center
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Center).size(50.dp),
-                    color = brown
-                )
+            } else if (state.errorMessage.isNotBlank()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
+                    contentAlignment = Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Warning,
+                            contentDescription = "Warning icon",
+                            modifier = Modifier.size(50.dp),
+                            tint = Color.LightGray
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = state.errorMessage,
+                            color = Color.LightGray,
+                            fontSize = 20.sp,
+                            textAlign = TextAlign.Center,
+                            fontFamily = Jura,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp)
+                        )
+                    }
+                }
+            } else if (state.isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
+                    contentAlignment = Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .align(Center)
+                            .size(50.dp),
+                        color = brown
+                    )
+                }
             }
         }
     }
