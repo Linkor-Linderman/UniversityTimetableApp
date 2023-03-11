@@ -4,4 +4,8 @@ data class Teacher(
     val firstName: String,
     val lastName: String,
     val patronymicName: String
-)
+) {
+    fun getFullName(): String {
+        return "$lastName $firstName $patronymicName"
+    }
+}

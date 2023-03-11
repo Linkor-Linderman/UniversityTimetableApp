@@ -13,6 +13,7 @@ import com.example.universitytimetableapp.feature_schedule.domain.use_case.UseCa
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -46,6 +47,22 @@ class ScheduleScreenViewModel @Inject constructor(
 
     }
 
+    fun refresh() = viewModelScope.launch{
+        _state.value = _state.value.copy(
+            errorMessage = "",
+            isRefreshing = true,
+            scheduleItemsForWeek = emptyList()
+        )
+        getScheduleForWeek(
+            type = type,
+            id = id,
+            name = name
+        )
+        _state.value = _state.value.copy(
+            isRefreshing = false
+        )
+    }
+
     private fun getCurrentDaysOfMonthForWeek() {
         _state.value = _state.value.copy(
             currentDaysNumber = useCases.getDayNumbersOfAWeek(_state.value.currentDay)
@@ -68,6 +85,13 @@ class ScheduleScreenViewModel @Inject constructor(
                     .toString()
             ).toString().substring(0, 10)
         Log.i("END DATE", endDate)
+
+        _state.value = _state.value.copy(
+            type = type,
+            id = id,
+            name = name
+        )
+
         when (type) {
             Constants.STUDENT -> {
                 useCases.getScheduleForWeekByGroupId(
@@ -79,9 +103,6 @@ class ScheduleScreenViewModel @Inject constructor(
                         is Resource.Success<List<ScheduleItemsForDay>> -> {
                             _state.value = _state.value.copy(
                                 scheduleItemsForWeek = result.data ?: emptyList(),
-                                type = Constants.STUDENT,
-                                id = id,
-                                name = name
                             )
                             Log.i("NAME", _state.value.name)
                         }
@@ -110,9 +131,6 @@ class ScheduleScreenViewModel @Inject constructor(
                         is Resource.Success -> {
                             _state.value = _state.value.copy(
                                 scheduleItemsForWeek = result.data ?: emptyList(),
-                                type = Constants.TEACHER,
-                                id = id,
-                                name = name
                             )
                         }
                         is Resource.Error -> {

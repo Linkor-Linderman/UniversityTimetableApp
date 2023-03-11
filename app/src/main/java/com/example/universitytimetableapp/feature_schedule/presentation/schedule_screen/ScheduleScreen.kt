@@ -2,22 +2,22 @@ package com.example.universitytimetableapp.feature_schedule.presentation.schedul
 
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.universitytimetableapp.R
+import com.example.universitytimetableapp.common.Constants
 import com.example.universitytimetableapp.common.Screen
+import com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.composable.FloatingActionButtonForScheduleScreen
 import com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.composable.TimeTableForWeek
 import com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.composable.TopBarForScheduleScreen
-import com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen.composable.FloatingActionButtonForScheduleScreen
 import com.example.universitytimetableapp.ui.theme.brown
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.example.universitytimetableapp.R
-import com.example.universitytimetableapp.common.Constants
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -53,6 +53,9 @@ fun ScheduleScreen(
         TimeTableForWeek(
             modifier = Modifier.padding(padding),
             state = state,
+            refresh = {
+                viewModel.refresh()
+            },
             onEvent = {
                 viewModel.onEvent(it)
             },

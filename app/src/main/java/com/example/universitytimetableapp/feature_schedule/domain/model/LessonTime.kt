@@ -1,11 +1,11 @@
 package com.example.universitytimetableapp.feature_schedule.domain.model
 
 data class LessonTime(
-    val endTime: EndTime,
+    val endTime: LocalTimeModel,
     val lessonNumber: Int,
-    val startTime: StartTime
+    val startTime: LocalTimeModel
 ) {
     fun getTimePeriod(): String {
-        return "${startTime.hour}:${startTime.minute} - ${endTime.hour}:${endTime.minute}"
+        return "${startTime.getHourAndMinute()} - ${endTime.getHourAndMinute()}"
     }
 }

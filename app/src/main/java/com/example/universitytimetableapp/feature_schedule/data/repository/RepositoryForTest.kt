@@ -14,13 +14,9 @@ class RepositoryForTest(
     ): List<ScheduleForDay> {
         val listOfScheduleForDay = mutableListOf<ScheduleForDay>()
         val listOfLessons = mutableListOf<Lesson>()
-
         for (i in 0..5) {
             listOfLessons.add(
                 Lesson(
-                    dayOfWeek = i.toString(),
-                    endDate = i.toString(),
-                    frequency = i,
                     groups = listOf(
                         Group(
                             id = i.toString(),
@@ -29,18 +25,17 @@ class RepositoryForTest(
                     ),
                     id = i.toString(),
                     lessonTime = LessonTime(
-                        endTime = EndTime(
+                        endTime = LocalTimeModel(
                             i, 20, 0, 0
                         ),
-                        startTime = StartTime(
+                        startTime = LocalTimeModel(
                             i + 1, 20, 0, 0
                         ),
                         lessonNumber = i
                     ),
                     lessonType = LessonType("10", "Лекция"),
-                    startDate = i.toString(),
                     studyRoom = StudyRoom(
-                        194, 2, "Лекторий", 332
+                        194, 2, "Лекторий", "332"
                     ),
                     subject = Subject(
                         "10",
@@ -57,7 +52,8 @@ class RepositoryForTest(
         for (i in 0..5) {
             listOfScheduleForDay.add(
                 ScheduleForDay(
-                    date = i.toString(),
+                    dayOfWeek = "",
+                    date = listOf(10, 10, 10),
                     lessons = listOfLessons
                 )
             )
@@ -72,89 +68,117 @@ class RepositoryForTest(
     ): List<ScheduleForDay> {
         val listOfScheduleForDay = mutableListOf<ScheduleForDay>()
         val listOfLessons = mutableListOf<Lesson>()
-        for (i in 2..4) {
-            listOfLessons.add(
-                Lesson(
-                    dayOfWeek = i.toString(),
-                    endDate = i.toString(),
-                    frequency = i,
-                    groups = listOf(
-                        Group(
-                            id = i.toString(),
-                            number = "972101"
+        if (startDate == "2023-03-06") {
+            for (i in 1..4) {
+                listOfLessons.add(
+                    Lesson(
+                        groups = listOf(
+                            Group(
+                                id = i.toString(),
+                                number = "972101"
+                            )
+                        ),
+                        id = i.toString(),
+                        lessonTime = LessonTime(
+                            endTime = LocalTimeModel(
+                                i, 20, 0, 0
+                            ),
+                            startTime = LocalTimeModel(
+                                i + 1, 20, 0, 0
+                            ),
+                            lessonNumber = i
+                        ),
+                        lessonType = LessonType("10", "Лекция"),
+                        studyRoom = StudyRoom(
+                            194, 2, "Лекторий", "332"
+                        ),
+                        subject = Subject(
+                            "10",
+                            "Математический Анализ"
+                        ),
+                        teacher = Teacher(
+                            firstName = "Даммер",
+                            lastName = "Диана",
+                            patronymicName = "Даммировна"
                         )
-                    ),
-                    id = i.toString(),
-                    lessonTime = LessonTime(
-                        endTime = EndTime(
-                            10, 20, 0, 0
-                        ),
-                        startTime = StartTime(
-                            10, 10, 0, 0
-                        ),
-                        lessonNumber = i
-                    ),
-                    lessonType = LessonType("10", "Лекция"),
-                    startDate = i.toString(),
-                    studyRoom = StudyRoom(
-                        194, 2, "Лекторий", 332
-                    ),
-                    subject = Subject(
-                        "10",
-                        "Математический Анализ"
-                    ),
-                    teacher = Teacher(
-                        firstName = "Даммер",
-                        lastName = "Диана",
-                        patronymicName = "Даммировна"
                     )
                 )
-            )
-        }
-        for (i in 6..8) {
-            listOfLessons.add(
-                Lesson(
-                    dayOfWeek = i.toString(),
-                    endDate = i.toString(),
-                    frequency = i,
-                    groups = listOf(
-                        Group(
-                            id = i.toString(),
-                            number = "972101"
+            }
+        } else {
+            for (i in 2..4) {
+                listOfLessons.add(
+                    Lesson(
+                        groups = listOf(
+                            Group(
+                                id = i.toString(),
+                                number = "972101"
+                            )
+                        ),
+                        id = i.toString(),
+                        lessonTime = LessonTime(
+                            endTime = LocalTimeModel(
+                                i + 1, 20, 0, 0
+                            ),
+                            startTime = LocalTimeModel(
+                                i, 10, 0, 0
+                            ),
+                            lessonNumber = i
+                        ),
+                        lessonType = LessonType("10", "Лекция"),
+                        studyRoom = null,
+                        subject = Subject(
+                            "10",
+                            "Математический Анализ"
+                        ),
+                        teacher = Teacher(
+                            firstName = "Даммер",
+                            lastName = "Диана",
+                            patronymicName = "Даммировна"
                         )
-                    ),
-                    id = i.toString(),
-                    lessonTime = LessonTime(
-                        endTime = EndTime(
-                            10, 20, 0, 0
-                        ),
-                        startTime = StartTime(
-                            10, 10, 0, 0
-                        ),
-                        lessonNumber = i
-                    ),
-                    lessonType = LessonType("10", "Лекция"),
-                    startDate = i.toString(),
-                    studyRoom = StudyRoom(
-                        194, 2, "Лекторий", 332
-                    ),
-                    subject = Subject(
-                        "10",
-                        "Математический Анализ"
-                    ),
-                    teacher = Teacher(
-                        firstName = "Даммер",
-                        lastName = "Диана",
-                        patronymicName = "Даммировна"
                     )
                 )
-            )
+            }
+            for (i in 5..5) {
+                listOfLessons.add(
+                    Lesson(
+                        groups = listOf(
+                            Group(
+                                id = i.toString(),
+                                number = "972101"
+                            )
+                        ),
+                        id = i.toString(),
+                        lessonTime = LessonTime(
+                            endTime = LocalTimeModel(
+                                i + 1, 35, 0, 0
+                            ),
+                            startTime = LocalTimeModel(
+                                i, 20, 0, 0
+                            ),
+                            lessonNumber = i
+                        ),
+                        lessonType = LessonType("10", "Лекция"),
+                        studyRoom = StudyRoom(
+                            194, null, "Лекторий", "332"
+                        ),
+                        subject = Subject(
+                            "10",
+                            "Математический Анализ"
+                        ),
+                        teacher = Teacher(
+                            firstName = "Даммер",
+                            lastName = "Диана",
+                            patronymicName = "Даммировна"
+                        )
+                    )
+                )
+            }
         }
-
         for (i in 0..6) {
             listOfScheduleForDay.add(
                 ScheduleForDay(
-                    date = i.toString(),
+                    dayOfWeek = "",
+                    date = listOf(10, 10, 10),
                     lessons = if (i == 6) emptyList<Lesson>() else listOfLessons
                 )
             )
@@ -167,10 +191,10 @@ class RepositoryForTest(
         for (i in 0..8) {
             listOfLesson.add(
                 LessonTime(
-                    endTime = EndTime(
+                    endTime = LocalTimeModel(
                         i + 1, 20, 0, 0
                     ),
-                    startTime = StartTime(
+                    startTime = LocalTimeModel(
                         i, 20, 0, 0
                     ),
                     lessonNumber = i

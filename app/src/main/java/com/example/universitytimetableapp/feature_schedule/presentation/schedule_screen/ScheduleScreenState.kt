@@ -14,5 +14,6 @@ data class ScheduleScreenState(
     val id: String = "",
     val name: String = "",
     val isLoading: Boolean = false,
-    val errorMessage: String = ""
+    val errorMessage: String = "",
+    val isRefreshing: Boolean = false
 )

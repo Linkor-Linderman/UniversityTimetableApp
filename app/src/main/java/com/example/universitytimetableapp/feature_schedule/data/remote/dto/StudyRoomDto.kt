@@ -4,10 +4,10 @@ import com.example.universitytimetableapp.feature_schedule.domain.model.StudyRoo
 
 data class StudyRoomDto(
     val buildingNumber: Int,
-    val floor: Int,
+    val floor: Int?,
     val id: String,
-    val name: String,
-    val number: Int
+    val name: String?,
+    val number: String
 ) {
     fun toStudyRoom(): StudyRoom {
         return StudyRoom(

@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.universitytimetableapp.R
@@ -25,6 +24,8 @@ fun SubjectTimeslotCard(
     lesson: Lesson
 ) {
     val coupleWord = stringResource(id = R.string.couple)
+    val onlineWord = stringResource(id = R.string.online)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -56,25 +57,25 @@ fun SubjectTimeslotCard(
             )
             Spacer(modifier = Modifier.height(7.dp))
             RowWithTextAndIcon(
-                text = "${lesson.teacher.lastName} ${lesson.teacher.firstName} ${lesson.teacher.patronymicName}",
+                text = lesson.teacher.getFullName(),
                 painter = painterResource(
                     id = R.drawable.teacher_icon,
                 )
             )
             Spacer(modifier = Modifier.height(7.dp))
             RowWithTextAndIcon(
-                text = "${lesson.studyRoom.number} (${lesson.studyRoom.floor}) ${lesson.studyRoom.name}",
+                text = if (lesson.studyRoom == null) {
+                    onlineWord
+                } else {
+                    lesson.studyRoom.getStudyRoomLocal()
+                },
                 painter = painterResource(
                     id = R.drawable.place_of_the_lesson_icon,
                 )
             )
             Spacer(modifier = Modifier.height(7.dp))
             RowWithTextAndIcon(
-                text = buildString {
-                    lesson.groups.forEach {
-                        append(it.number + ", ")
-                    }
-                }.dropLast(2),
+                text = lesson.getGroupsString(),
                 painter = painterResource(
                     id = R.drawable.group_icon,
                 )

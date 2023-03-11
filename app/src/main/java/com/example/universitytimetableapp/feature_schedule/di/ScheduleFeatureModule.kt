@@ -19,12 +19,8 @@ object ScheduleFeatureModule {
 
     @Provides
     @Singleton
-    fun provideDictionaryApi(): ScheduleApiService {
-        return Retrofit
-            .Builder()
-            .baseUrl(ScheduleApiService.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+    fun provideDictionaryApi(retrofit: Retrofit): ScheduleApiService {
+        return retrofit
             .create(ScheduleApiService::class.java)
     }
 
@@ -33,7 +29,7 @@ object ScheduleFeatureModule {
     fun provideScheduleFeatureRepository(
         api: ScheduleApiService
     ): ScheduleFeatureRepository {
-        return RepositoryForTest(
+        return ScheduleFeatureRepositoryImpl(
             api = api
         )
     }
