@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/brown</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/brown</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/icon_for_splash_screen</item>
+        <item name="android:windowSplashScreenBrandingImage" tools:targetApi="s">@drawable/rabock_text_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.UniversityTimetableApp</item>
+    </style>
+</resources>
