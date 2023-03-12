@@ -10,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -26,7 +25,6 @@ import com.example.universitytimetableapp.feature_application_login.presentation
 import com.example.universitytimetableapp.feature_application_login.presentation.InfoDialog
 import com.example.universitytimetableapp.feature_application_login.presentation.InputField
 import com.example.universitytimetableapp.feature_application_login.presentation.SecondButton
-import com.example.universitytimetableapp.ui.theme.greyTint
 
 @Composable
 fun RegistrationScreen(
@@ -64,7 +62,7 @@ fun RegistrationScreen(
     Column {
         Spacer(modifier = Modifier.fillMaxHeight(0.1f))
         Image(
-            painter = ColorPainter(greyTint),
+            imageVector = ImageVector.vectorResource(R.drawable.icon_for_splash_screen),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth(0.2f)
