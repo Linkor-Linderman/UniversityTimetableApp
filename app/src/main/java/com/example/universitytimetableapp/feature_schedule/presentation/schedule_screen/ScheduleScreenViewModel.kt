@@ -1,6 +1,5 @@
 package com.example.universitytimetableapp.feature_schedule.presentation.schedule_screen
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -49,9 +48,7 @@ class ScheduleScreenViewModel @Inject constructor(
 
     fun refresh() = viewModelScope.launch {
         _state.value = _state.value.copy(
-            errorMessage = "",
             isRefreshing = true,
-            scheduleItemsForWeek = emptyList()
         )
         getScheduleForWeek(
             type = type,
@@ -88,8 +85,11 @@ class ScheduleScreenViewModel @Inject constructor(
         _state.value = _state.value.copy(
             type = type,
             id = id,
-            name = name
+            name = name,
+            errorMessage = "",
+            scheduleItemsForWeek = emptyList()
         )
+
 
         when (type) {
             Constants.STUDENT -> {
@@ -103,19 +103,16 @@ class ScheduleScreenViewModel @Inject constructor(
                             _state.value = _state.value.copy(
                                 scheduleItemsForWeek = result.data ?: emptyList(),
                             )
-                            Log.i("NAME", _state.value.name)
                         }
                         is Resource.Error<List<ScheduleItemsForDay>> -> {
                             _state.value = _state.value.copy(
                                 errorMessage = result.message ?: "An unexpected error occured"
                             )
-                            Log.i("errorMessage", _state.value.errorMessage)
                         }
                         is Resource.Loading<List<ScheduleItemsForDay>> -> {
                             _state.value = _state.value.copy(
                                 isLoading = true
                             )
-                            Log.i("loading", _state.value.isLoading.toString())
                         }
                     }
                 }.launchIn(viewModelScope)
@@ -181,7 +178,6 @@ class ScheduleScreenViewModel @Inject constructor(
                     monthOfCurrentWeek = event.newDay.monthOfYear - 1,
                     yearOfCurrentWeek = event.newDay.year.toString(),
                 )
-                Log.i("CURRENT DAY ON CHANGE", _state.value.currentDay.toString())
             }
             is ScheduleScreenEvent.ChangeToNextWeek -> {
                 val mondayOfNextWeek = useCases.getNextMondayUseCase(_state.value.currentDay)
@@ -191,12 +187,12 @@ class ScheduleScreenViewModel @Inject constructor(
                     yearOfCurrentWeek = mondayOfNextWeek.year.toString(),
                     currentDaysNumber = useCases.getDayNumbersOfAWeek(mondayOfNextWeek),
                 )
+
                 getScheduleForWeek(
                     id = _state.value.id,
                     type = _state.value.type,
                     name = _state.value.name
                 )
-                Log.i("MONDAY OF NEXT WEEK", _state.value.currentDay.toString())
             }
             is ScheduleScreenEvent.ChangeToPreviousWeek -> {
                 val mondayOfPreviousWeek =
@@ -212,7 +208,6 @@ class ScheduleScreenViewModel @Inject constructor(
                     type = _state.value.type,
                     name = _state.value.name
                 )
-                Log.i("MONDAY OF PREVIOUS WEEK", _state.value.currentDay.toString())
             }
         }
     }
