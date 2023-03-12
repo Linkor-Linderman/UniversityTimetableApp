@@ -4,25 +4,15 @@ import com.example.universitytimetableapp.feature_schedule.domain.model.LessonTi
 import com.example.universitytimetableapp.feature_schedule.domain.model.LocalTimeModel
 
 data class LessonTimeDto(
-    val endTime: List<Int>,
+    val endTime: LocalTimeDto,
     val lessonNumber: Int,
-    val startTime: List<Int>
+    val startTime: LocalTimeDto
 ) {
     fun toLessonTime(): LessonTime {
         return LessonTime(
-            endTime = LocalTimeModel(
-                endTime[0],
-                endTime[1],
-                null,
-                null
-            ),
+            endTime = endTime.toLocalTimeModel(),
             lessonNumber = lessonNumber,
-            startTime = LocalTimeModel(
-                startTime[0],
-                startTime[1],
-                null,
-                null
-            )
+            startTime = startTime.toLocalTimeModel()
         )
     }
 }

@@ -52,7 +52,7 @@ class RepositoryForTest(
             listOfScheduleForDay.add(
                 ScheduleForDay(
                     dayOfWeek = "",
-                    date = listOf(10, 10, 10),
+                    date = "",
                     lessons = listOfLessons
                 )
             )
@@ -177,7 +177,7 @@ class RepositoryForTest(
             listOfScheduleForDay.add(
                 ScheduleForDay(
                     dayOfWeek = "",
-                    date = listOf(10, 10, 10),
+                    date = "",
                     lessons = if (i == 6) emptyList<Lesson>() else listOfLessons
                 )
             )
