@@ -1,6 +1,5 @@
 package com.example.universitytimetableapp.feature_schedule.domain.use_case
 
-import android.util.Log
 import com.example.universitytimetableapp.common.Resource
 import com.example.universitytimetableapp.feature_schedule.domain.model.ScheduleItem
 import com.example.universitytimetableapp.feature_schedule.domain.model.ScheduleItemsForDay
@@ -29,17 +28,10 @@ class GetScheduleForWeekByTeacherId @Inject constructor(
 
                 val listOfScheduleItemForWeek = mutableListOf<ScheduleItemsForDay>()
 
-                Log.i(
-                    "listOfScheduleForDaySIZE",
-                    listOfScheduleForDay.size.toString(),
-                )
                 for (scheduleForDay in listOfScheduleForDay) {
                     var previousLessonNumber = listOfLessonTime[0].lessonNumber
                     val listOfScheduleItemCard = mutableListOf<ScheduleItem>()
-                    Log.i(
-                        "scheduleForDay.lessons.size",
-                        scheduleForDay.lessons.size.toString(),
-                    )
+
                     for (lessonIndex in 0 until scheduleForDay.lessons.size) {
                         val lessonNumberForCurrentLesson =
                             scheduleForDay.lessons[lessonIndex].lessonTime.lessonNumber
@@ -52,7 +44,7 @@ class GetScheduleForWeekByTeacherId @Inject constructor(
                             listOfScheduleItemCard.add(
                                 ScheduleItem.WindowItem(
                                     windowNumber = (lessonNumberForCurrentLesson - previousLessonNumber).toString(),
-                                    startTime = listOfLessonTime[previousLessonNumber-1].startTime,
+                                    startTime = listOfLessonTime[previousLessonNumber - 1].startTime,
                                     endTime = listOfLessonTime[lessonNumberForCurrentLesson - 2].endTime
                                 )
                             )
@@ -61,15 +53,6 @@ class GetScheduleForWeekByTeacherId @Inject constructor(
                             ScheduleItem.SubjectItem(
                                 lesson = scheduleForDay.lessons[lessonIndex]
                             )
-                        )
-                        Log.i(
-                            "lessonNumberForCurrentLesson",
-                            lessonNumberForCurrentLesson.toString()
-                        )
-                        Log.i("lessonNumberForNextLesson", lessonNumberForNextLesson.toString())
-                        Log.i(
-                            "difference",
-                            (lessonNumberForNextLesson - lessonNumberForCurrentLesson).toString()
                         )
                         if (lessonNumberForNextLesson - lessonNumberForCurrentLesson == 1) {
                             listOfScheduleItemCard.add(

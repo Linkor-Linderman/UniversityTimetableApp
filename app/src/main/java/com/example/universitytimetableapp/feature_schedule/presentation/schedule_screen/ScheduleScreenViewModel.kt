@@ -78,13 +78,12 @@ class ScheduleScreenViewModel @Inject constructor(
         val startDate =
             fmt.parseDateTime(_state.value.currentDaysNumber[0].toLocalDate().toString()).toString()
                 .substring(0, 10)
-        Log.i("START DATE", startDate)
+
         val endDate =
             fmt.parseDateTime(
                 _state.value.currentDaysNumber[_state.value.currentDaysNumber.size - 1].toLocalDate()
                     .toString()
             ).toString().substring(0, 10)
-        Log.i("END DATE", endDate)
 
         _state.value = _state.value.copy(
             type = type,
