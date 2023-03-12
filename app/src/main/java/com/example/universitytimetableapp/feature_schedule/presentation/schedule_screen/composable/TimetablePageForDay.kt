@@ -114,7 +114,7 @@ fun getPeriodInMinutes(
     val format = SimpleDateFormat("HH:mm")
     val date1: Date = format.parse("${startTime.hour}:${startTime.minute}")
     val date2: Date = format.parse("${endTime.hour}:${endTime.minute}")
-    val difference: Long = date1.time - date2.time
+    val difference: Long = date2.time - date1.time
     return (difference / 60000).toString()
 }
 
