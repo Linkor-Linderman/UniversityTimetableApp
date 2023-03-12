@@ -14,10 +14,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -71,17 +69,16 @@ fun FirstScreen(
 
         Box(
             modifier = Modifier
-                .padding(top = 50.dp)
-                .fillMaxSize(),
-            contentAlignment = Alignment.CenterEnd
+                .fillMaxHeight(0.82f)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.BottomEnd
         ) {
             Image(
-                bitmap = ImageBitmap.imageResource(R.drawable.axolot),
+                imageVector = ImageVector.vectorResource(R.drawable.rabbit),
                 contentDescription = null,
                 modifier = Modifier
-                    .fillMaxWidth(0.68f)
                     .fillMaxHeight(0.5f),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.FillHeight
             )
         }
         
