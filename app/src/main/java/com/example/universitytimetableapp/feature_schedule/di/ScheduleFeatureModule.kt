@@ -44,7 +44,8 @@ object ScheduleFeatureModule {
             getNextMondayUseCase = GetNextMondayUseCase(),
             getPreviousMondayUseCase = GetPreviousMondayUseCase(),
             getScheduleForWeekByGroupId = GetScheduleForWeekByGroupId(repository),
-            getScheduleForWeekByTeacherId = GetScheduleForWeekByTeacherId(repository)
+            getScheduleForWeekByTeacherId = GetScheduleForWeekByTeacherId(repository),
+            getScheduleForWeekByStudyRoomId = GetScheduleForWeekByStudyRoomId(repository)
         )
     }
 }

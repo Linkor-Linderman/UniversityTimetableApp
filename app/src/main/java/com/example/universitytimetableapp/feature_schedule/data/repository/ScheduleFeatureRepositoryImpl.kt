@@ -32,6 +32,18 @@ class ScheduleFeatureRepositoryImpl(
         ).map { it.toScheduleForDay() }
     }
 
+    override suspend fun getScheduleForWeekByStudyRoomId(
+        studyRoomId: String,
+        startDate: String,
+        endDate: String
+    ): List<ScheduleForDay> {
+        return api.getScheduleForWeekByStudyRoomId(
+            studyRoomId = studyRoomId,
+            startDate = startDate,
+            endDate = endDate
+        ).map { it.toScheduleForDay() }
+    }
+
     override suspend fun getLessonsTimeDetail(): List<LessonTime> {
         return api.getLessonsTimeDetail().map { it.toLessonTime() }
     }
