@@ -47,7 +47,7 @@ class ScheduleScreenViewModel @Inject constructor(
 
     }
 
-    fun refresh() = viewModelScope.launch{
+    fun refresh() = viewModelScope.launch {
         _state.value = _state.value.copy(
             errorMessage = "",
             isRefreshing = true,
@@ -123,6 +123,31 @@ class ScheduleScreenViewModel @Inject constructor(
             }
             Constants.TEACHER -> {
                 useCases.getScheduleForWeekByTeacherId(
+                    id = id,
+                    startDate = startDate,
+                    endDate = endDate
+                ).onEach { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            _state.value = _state.value.copy(
+                                scheduleItemsForWeek = result.data ?: emptyList(),
+                            )
+                        }
+                        is Resource.Error -> {
+                            _state.value = _state.value.copy(
+                                errorMessage = result.message ?: "An unexpected error occured"
+                            )
+                        }
+                        is Resource.Loading -> {
+                            _state.value = _state.value.copy(
+                                isLoading = true
+                            )
+                        }
+                    }
+                }.launchIn(viewModelScope)
+            }
+            Constants.CLASSROOM -> {
+                useCases.getScheduleForWeekByStudyRoomId(
                     id = id,
                     startDate = startDate,
                     endDate = endDate

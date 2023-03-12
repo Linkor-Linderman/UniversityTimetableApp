@@ -22,6 +22,13 @@ interface ScheduleApiService {
         @Query("endDate") endDate: String,
     ): List<ScheduleForDayDto>
 
+    @GET("/api/v1/schedule/study-room/{id}")
+    suspend fun getScheduleForWeekByStudyRoomId(
+        @Path("id") studyRoomId: String,
+        @Query("startDate") startDate: String,
+        @Query("endDate") endDate: String,
+    ): List<ScheduleForDayDto>
+
     @GET("/api/v1/schedule/lesson-time")
     suspend fun getLessonsTimeDetail(): List<LessonTimeDto>
 }

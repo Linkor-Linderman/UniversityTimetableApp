@@ -17,6 +17,12 @@ interface ScheduleFeatureRepository {
         endDate: String
     ): List<ScheduleForDay>
 
+    suspend fun getScheduleForWeekByStudyRoomId(
+        studyRoomId: String,
+        startDate: String,
+        endDate: String
+    ): List<ScheduleForDay>
+
     suspend fun getLessonsTimeDetail(): List<LessonTime>
 
 }

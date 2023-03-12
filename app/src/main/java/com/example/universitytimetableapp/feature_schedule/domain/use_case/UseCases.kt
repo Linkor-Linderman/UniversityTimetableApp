@@ -5,5 +5,6 @@ data class UseCases(
     val getNextMondayUseCase: GetNextMondayUseCase,
     val getPreviousMondayUseCase: GetPreviousMondayUseCase,
     val getScheduleForWeekByGroupId: GetScheduleForWeekByGroupId,
-    val getScheduleForWeekByTeacherId: GetScheduleForWeekByTeacherId
+    val getScheduleForWeekByTeacherId: GetScheduleForWeekByTeacherId,
+    val getScheduleForWeekByStudyRoomId: GetScheduleForWeekByStudyRoomId
 )

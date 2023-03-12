@@ -5,7 +5,6 @@ import com.example.universitytimetableapp.feature_schedule.domain.model.*
 import com.example.universitytimetableapp.feature_schedule.domain.repository.ScheduleFeatureRepository
 
 class RepositoryForTest(
-    val api: ScheduleApiService
 ) : ScheduleFeatureRepository {
     override suspend fun getScheduleForWeekByTeacherId(
         teacherId: String,
@@ -184,6 +183,14 @@ class RepositoryForTest(
             )
         }
         return listOfScheduleForDay
+    }
+
+    override suspend fun getScheduleForWeekByStudyRoomId(
+        studyRoomId: String,
+        startDate: String,
+        endDate: String
+    ): List<ScheduleForDay> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun getLessonsTimeDetail(): List<LessonTime> {
