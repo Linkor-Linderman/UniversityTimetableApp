@@ -6,5 +6,5 @@ data class AccountInfo(
     val full_name: String,
     val role: String,
     val group: GroupDto?,
-    val teacherId: String
+    val teacherId: String?
 )

@@ -25,7 +25,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.universitytimetableapp.R
 import com.example.universitytimetableapp.common.Constants
-import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_profile.presentation.AppProgressIndicator
 import com.example.universitytimetableapp.ui.theme.Jura
 import com.example.universitytimetableapp.ui.theme.Zekton
@@ -129,7 +128,7 @@ fun ProfileScreen(
             viewModel.setDefaultState()
             navController.navigate(state!!.destinationString) {
                 if (state!!.isExit) {
-                    popUpTo(Screen.ProfileScreen.route) { inclusive = true }
+                    popUpTo(navController.graph.id) { inclusive = true }
                 }
             }
         }

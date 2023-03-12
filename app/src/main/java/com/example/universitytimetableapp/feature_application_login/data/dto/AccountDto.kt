@@ -9,7 +9,7 @@ data class AccountDto(
     val patronymicName: String?,
     val role: String,
     val group: GroupDto?,
-    val teacherId: String,
+    val teacherId: String?,
     val email: String
 ) {
     fun toAccountInfo(): AccountInfo {

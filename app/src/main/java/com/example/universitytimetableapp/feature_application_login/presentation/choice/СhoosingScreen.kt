@@ -1,6 +1,5 @@
 package com.example.universitytimetableapp.feature_application_login.presentation.choice
 
-import android.view.Gravity
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -47,9 +46,7 @@ fun ChoosingScreen(
         AppProgressIndicator(Color.White)
     }
     if (state!!.isShowMessage) {
-        Toast.makeText(LocalContext.current, state!!.message, Toast.LENGTH_SHORT).apply {
-            setGravity(Gravity.FILL_HORIZONTAL, 0, 0)
-        }.show()
+        Toast.makeText(LocalContext.current, state!!.message, Toast.LENGTH_SHORT).show()
         viewModel.setDefaultState()
     }
     if (state!!.mayNavigate) {

@@ -81,7 +81,7 @@ class LoginViewModel @Inject constructor(
                             Constants.TEACHER -> {
                                 UserSettings(
                                     role = it.role,
-                                    idChosenItem = it.teacherId,
+                                    idChosenItem = it.teacherId!!,
                                     nameChosenItem = it.full_name
                                 )
                             }

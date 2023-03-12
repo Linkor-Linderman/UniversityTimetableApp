@@ -6,6 +6,7 @@ import com.example.universitytimetableapp.common.MessageSource
 import com.example.universitytimetableapp.common.Screen
 import com.example.universitytimetableapp.feature_application_login.domain.model.SelectionItem
 import com.example.universitytimetableapp.feature_application_login.domain.model.UserSettings
+import com.example.universitytimetableapp.feature_application_login.domain.use_case.ChangeGroupUseCase
 import com.example.universitytimetableapp.feature_application_login.domain.use_case.GetSelectionListUseCase
 import com.example.universitytimetableapp.feature_application_login.domain.use_case.PutUserSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,7 @@ class ChoosingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getSelectionListUseCase: GetSelectionListUseCase,
     private val putUserSettingsUseCase: PutUserSettingsUseCase,
+    private val changeGroupUseCase: ChangeGroupUseCase,
     private val messageSource: MessageSource
 ) : ViewModel() {
 
@@ -116,7 +118,7 @@ class ChoosingViewModel @Inject constructor(
             )
         }
         else if (case == Constants.CHANGE_GROUP) {
-            _uiState.value = _uiState.value!!.copy(isShowDialog = true)
+            changeGroup()
             return
         }
         else {
@@ -163,6 +165,23 @@ class ChoosingViewModel @Inject constructor(
                     _uiState.value = _uiState.value!!.copy(
                         isLoading = false
                     )
+                    it.message?.let {  text ->
+                        _uiState.value = _uiState.value!!.copy(
+                            isShowMessage = true,
+                            message = text
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun changeGroup() {
+        viewModelScope.launch {
+            changeGroupUseCase(_choosingItem.value!!.id).collect { result ->
+                result.onSuccess {
+                    _uiState.value = _uiState.value!!.copy(isShowDialog = true)
+                }.onFailure {
                     it.message?.let {  text ->
                         _uiState.value = _uiState.value!!.copy(
                             isShowMessage = true,

@@ -113,7 +113,7 @@ fun ChangePasswordField(
         onValueChange = { valChange(it) },
         modifier = Modifier
             .fillMaxWidth()
-            .height(42.dp),
+            .height(47.dp),
         textStyle = TextStyle(
             fontFamily = Jura,
             fontWeight = FontWeight.Normal,
