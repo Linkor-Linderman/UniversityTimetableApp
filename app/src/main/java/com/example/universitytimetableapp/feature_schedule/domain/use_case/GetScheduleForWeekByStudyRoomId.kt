@@ -1,7 +1,6 @@
 package com.example.universitytimetableapp.feature_schedule.domain.use_case
 
 import com.example.universitytimetableapp.common.Resource
-import com.example.universitytimetableapp.feature_schedule.data.repository.RepositoryForTest
 import com.example.universitytimetableapp.feature_schedule.domain.model.ScheduleItem
 import com.example.universitytimetableapp.feature_schedule.domain.model.ScheduleItemsForDay
 import com.example.universitytimetableapp.feature_schedule.domain.repository.ScheduleFeatureRepository
@@ -22,9 +21,8 @@ class GetScheduleForWeekByStudyRoomId @Inject constructor(
         flow {
             try {
                 emit(Resource.Loading<List<ScheduleItemsForDay>>())
-                val testRepository = RepositoryForTest()
                 val listOfScheduleForDay =
-                    testRepository.getScheduleForWeekByGroupId(id, startDate, endDate)
+                    repository.getScheduleForWeekByStudyRoomId(id, startDate, endDate)
                 val listOfLessonTime = repository.getLessonsTimeDetail()
 
                 val listOfScheduleItemForWeek = mutableListOf<ScheduleItemsForDay>()
