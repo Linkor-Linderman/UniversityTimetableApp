@@ -1,4 +1,4 @@
-# BinList
+# UniversityTimetableApp
 Приложение для просмотра расписаний студенческих групп/преподавателей/аудиторий(MVVM, Use Cases, Compose).<br>
 
 <img src="https://user-images.githubusercontent.com/66219019/226164184-b8af041f-4fc1-4ad5-a5a5-ee7201fe3e2a.jpg" width="400"><br>
